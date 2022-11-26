@@ -3,7 +3,7 @@
    <img src="https://badgen.net/npm/license/react-log-hook" alt="License" />
   <img src="https://badgen.net/bundlephobia/minzip/react-log-hook" alt="minzipped size"/>
   <img src="https://badgen.net/bundlephobia/dependency-count/react-log-hook" alt="dependency count"/>
-  <img src="https://github.com/dolfbarr/react-log-hook/workflows/CI/badge.svg" alt="Build Status" />
+  <img src="https://github.com/dolfbarr/react-log-hook/actions/workflows/main.yml/badge.svg" alt="Build Status" />
   <img src="https://badgen.net/github/last-commit/dolfbarr/react-log-hook/main" alt="Last Commit" />
   <br>
   <br>
