@@ -19,7 +19,7 @@
     "build:storybook": "build-storybook",
     "release:check": "run-s lint type:check test",
     "release:test": "npm publish --dry-run",
-    "release": "run-s release:check release:test build np",
+    "release": "run-s release:check release:test build && np",
     "size": "size-limit",
     "prepare": "husky install"
   },
