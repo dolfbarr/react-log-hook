@@ -1,6 +1,6 @@
 {
   "name": "react-log-hook",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "React hook for logging per component lifecycle",
   "main": "dist/main.js",
   "module": "dist/module.js",
