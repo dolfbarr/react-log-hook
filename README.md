@@ -26,7 +26,9 @@ React hook for logging per component lifecycle
 - 🗂️ **Typed** — made with TypeScript, ships with types
 - 🥰 **Simple** — don't worry about any changes in your props & state
 - 🔧 **Customizable** — work in progress 😉
-- 🏎️ **Fast** 🔬 **Tested** 📭 **No dependecies**
+- 🔬 **Tested** — up to 100% coverage
+- 🏎️ **Fast** — native react hooks & optimized
+- 📭 **No dependecies**
 
 
 
