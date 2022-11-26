@@ -74,6 +74,7 @@ describe('useLog', () => {
       logUnmount()
     })
     expect(consoleLog).toBeCalledWith('On unmount: null')
-    expect(consoleLog).toBeCalledTimes(6)
+    expect(consoleLog).toBeCalledWith('Before unmount: onChange 2s')
+    expect(consoleLog).toBeCalledTimes(7)
   })
 })
