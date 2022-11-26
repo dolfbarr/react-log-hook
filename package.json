@@ -4,7 +4,8 @@
   "description": "React hook for logging per component lifecycle",
   "main": "dist/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "npx eslint \"./**/*.ts\" --cache --cache-strategy content"
   },
   "repository": {
     "type": "git",
@@ -27,6 +28,16 @@
   },
   "homepage": "https://github.com/dolfbarr/react-log-hook#readme",
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.44.0",
+    "eslint": "^8.28.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-config-standard-with-typescript": "^23.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-n": "^15.5.1",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-promise": "^6.1.1",
+    "eslint-plugin-react": "^7.31.11",
+    "prettier": "^2.8.0",
     "typescript": "^4.9.3"
   }
 }
