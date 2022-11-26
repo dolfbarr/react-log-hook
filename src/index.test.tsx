@@ -52,7 +52,6 @@ describe('useLog', () => {
     expect(consoleLog).toBeCalledWith('On mount: null')
     expect(consoleLog).toBeCalledWith('On change: null')
 
-    // since react renderHook has an additional on mount event
     expect(consoleLog).toBeCalledWith('On change: onMount')
 
     expect(consoleLog).toBeCalledTimes(3)
