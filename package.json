@@ -2,9 +2,16 @@
   "name": "react-log-hook",
   "version": "0.1.0",
   "description": "React hook for logging per component lifecycle",
-  "main": "dist/index.js",
+  "main": "dist/main.js",
+  "module": "dist/module.js",
+  "types": "dist/types.d.ts",
+  "engines": {
+    "node": ">= 12"
+  },
   "scripts": {
     "start:demo": "parcel demo/index.html --dist-dir ./build",
+    "start": "parcel src/index.tsx --dist-dir ./dist",
+    "build": "parcel build src/index.tsx --dist-dir ./dist --no-source-maps",
     "test": "jest",
     "lint": "npx eslint \"./**/*.ts\" --cache --cache-strategy content",
     "storybook": "start-storybook -p 6006",
@@ -33,6 +40,8 @@
   "devDependencies": {
     "@babel/core": "^7.20.2",
     "@jest/globals": "^29.3.1",
+    "@parcel/packager-ts": "^2.8.0",
+    "@parcel/transformer-typescript-types": "^2.8.0",
     "@storybook/addon-actions": "^6.5.13",
     "@storybook/addon-console": "^1.2.3",
     "@storybook/addon-essentials": "^6.5.13",
