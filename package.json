@@ -25,5 +25,8 @@
   "bugs": {
     "url": "https://github.com/dolfbarr/react-log-hook/issues"
   },
-  "homepage": "https://github.com/dolfbarr/react-log-hook#readme"
+  "homepage": "https://github.com/dolfbarr/react-log-hook#readme",
+  "devDependencies": {
+    "typescript": "^4.9.3"
+  }
 }
