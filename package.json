@@ -4,6 +4,7 @@
   "description": "React hook for logging per component lifecycle",
   "main": "dist/index.js",
   "scripts": {
+    "start:demo": "parcel demo/index.html --dist-dir ./build",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "npx eslint \"./**/*.ts\" --cache --cache-strategy content"
   },
@@ -28,6 +29,8 @@
   },
   "homepage": "https://github.com/dolfbarr/react-log-hook#readme",
   "devDependencies": {
+    "@types/react": "^18.0.25",
+    "@types/react-dom": "^18.0.9",
     "@typescript-eslint/eslint-plugin": "^5.44.0",
     "eslint": "^8.28.0",
     "eslint-config-prettier": "^8.5.0",
@@ -37,7 +40,13 @@
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-react": "^7.31.11",
+    "parcel": "^2.8.0",
     "prettier": "^2.8.0",
+    "process": "^0.11.10",
     "typescript": "^4.9.3"
+  },
+  "peerDependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   }
 }

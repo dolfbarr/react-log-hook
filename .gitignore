@@ -108,3 +108,8 @@ dist
 
 # VS code
 .vscode/
+
+# Parcel
+build/
+dist/
+.parcel-cache/
