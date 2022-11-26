@@ -1,0 +1,29 @@
+{
+  "name": "react-log-hook",
+  "version": "0.1.0",
+  "description": "React hook for logging per component lifecycle",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dolfbarr/react-log-hook.git"
+  },
+  "keywords": [
+    "react",
+    "parcel",
+    "typescript",
+    "hook",
+    "react-hook",
+    "log",
+    "logging",
+    "logger"
+  ],
+  "author": "Dolf Barr <mail@dolf.me>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dolfbarr/react-log-hook/issues"
+  },
+  "homepage": "https://github.com/dolfbarr/react-log-hook#readme"
+}
