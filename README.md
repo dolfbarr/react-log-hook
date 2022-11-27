@@ -28,7 +28,7 @@ React hook for logging per component lifecycle
 - 🔧 **Customizable** — work in progress 😉
 - 🔬 **Tested** — up to 100% coverage
 - 🏎️ **Fast** — native react hooks & optimized
-- 📭 **No dependecies**
+- 📭 **Minimal dependecies** — only some lodash functions
 
 
 
