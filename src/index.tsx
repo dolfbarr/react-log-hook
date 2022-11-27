@@ -1,7 +1,8 @@
 import { useEffect, useRef } from 'react'
 
 const CSS_COMPONENT = 'color: DodgerBlue'
-const CSS_DATE = 'color: SlateGray;'
+const CSS_CHANGE = 'color: green; font-weight: bold;'
+const CSS_SUB_VALUE = 'color: SlateGray; font-weight: thin;'
 
 export interface UseLogReturn {
   log: <T>(value: T) => void
@@ -9,6 +10,7 @@ export interface UseLogReturn {
 
 interface PrintProps<T> {
   value: T
+  prevValue?: T
   label: string
   group?: string
   type?: PrintTypes
@@ -17,7 +19,6 @@ interface PrintProps<T> {
 export enum PrintTypes {
   Mount = 'Mount',
   Unmount = 'Unmount',
-  BeforeUnmount = 'Before unmount',
   Change = 'Change',
 }
 
@@ -48,16 +49,28 @@ export function useLog(): UseLogReturn {
   function print<T>({
     value,
     label,
+    prevValue,
     type = PrintTypes.Change,
     group = getGroupLabel(type),
   }: PrintProps<T>): void {
-    console.group(group, CSS_COMPONENT, CSS_DATE)
-    console.log(`${label}: ${String(value)}`)
+    console.group(group, CSS_COMPONENT, CSS_SUB_VALUE)
+
+    if (!('prevValue' in arguments[0])) {
+      console.log(`${label.padStart(14, ' ')}: ${String(value)}`)
+    } else {
+      console.log(
+        `Previous value: %c${String(arguments[0].prevValue)}`,
+        CSS_SUB_VALUE,
+      )
+      console.log(` Current value: %c${String(value)}`, CSS_CHANGE)
+    }
+
     console.groupEnd()
   }
 
   function log<T>(value: T): void {
     const clonedValue = JSON.parse(JSON.stringify(value))
+    const prevValueRef = useRef<T>()
 
     return (() => {
       const isUnmounting = useRef(false)
@@ -74,11 +87,14 @@ export function useLog(): UseLogReturn {
           type: PrintTypes.Mount,
         })
 
+        prevValueRef.current = value
+
         return () => {
           print({
             label: 'On unmount',
             value: clonedValue,
             type: PrintTypes.Unmount,
+            prevValue: prevValueRef.current,
           })
         }
       }, [])
@@ -88,17 +104,10 @@ export function useLog(): UseLogReturn {
           label: 'On change',
           value: clonedValue,
           type: PrintTypes.Change,
+          prevValue: prevValueRef.current,
         })
 
-        return () => {
-          if (isUnmounting.current) {
-            print({
-              label: 'Before unmount',
-              value: clonedValue,
-              type: PrintTypes.BeforeUnmount,
-            })
-          }
-        }
+        prevValueRef.current = value
       }, [value])
     })()
   }

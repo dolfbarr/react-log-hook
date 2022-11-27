@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 
 describe('useLog', () => {
   const consoleLog = jest.spyOn(console, 'log').mockImplementation(() => {})
+  const consoleGroup = jest.spyOn(console, 'group').mockImplementation(() => {})
 
   beforeEach(() => {
     jest.useFakeTimers()
@@ -23,9 +24,16 @@ describe('useLog', () => {
     expect(result.current.log).toBeTruthy()
 
     renderHook(() => result.current.log('Test'))
-    expect(consoleLog).toBeCalledWith('On mount: Test')
-    expect(consoleLog).toBeCalledWith('On change: Test')
-    expect(consoleLog).toBeCalledTimes(2)
+    expect(consoleLog).toBeCalledWith('      On mount: Test')
+    expect(consoleLog).toBeCalledWith(
+      'Previous value: %cTest',
+      'color: SlateGray; font-weight: thin;',
+    )
+    expect(consoleLog).toBeCalledWith(
+      ' Current value: %cTest',
+      'color: green; font-weight: bold;',
+    )
+    expect(consoleLog).toBeCalledTimes(3)
   })
 
   it('renders hook with changes', async () => {
@@ -48,33 +56,111 @@ describe('useLog', () => {
       }, [])
     })
 
-    // set initial values
-    expect(consoleLog).toBeCalledWith('On mount: null')
-    expect(consoleLog).toBeCalledWith('On change: null')
+    /*
+     * Set Initial Values
+     */
+    expect(consoleGroup).toBeCalledWith(
+      `Mount in %c<TestComponent /> %c@ ${new Date().toLocaleTimeString()}`,
+      'color: DodgerBlue',
+      'color: SlateGray; font-weight: thin;',
+    )
+    expect(consoleLog).toBeCalledWith('      On mount: null')
 
-    expect(consoleLog).toBeCalledWith('On change: onMount')
-
-    expect(consoleLog).toBeCalledTimes(3)
-
-    await act(() => {
-      jest.advanceTimersByTime(1000)
-      logRerender()
-    })
-    expect(consoleLog).toBeCalledWith('On change: onChange 1s')
-    expect(consoleLog).toBeCalledTimes(4)
-
-    await act(() => {
-      jest.advanceTimersByTime(1000)
-      logRerender()
-    })
-    expect(consoleLog).toBeCalledWith('On change: onChange 2s')
+    expect(consoleGroup).toBeCalledWith(
+      `Change in %c<TestComponent /> %c@ ${new Date().toLocaleTimeString()}`,
+      'color: DodgerBlue',
+      'color: SlateGray; font-weight: thin;',
+    )
+    expect(consoleLog).toBeCalledWith(
+      'Previous value: %cnull',
+      'color: SlateGray; font-weight: thin;',
+    )
+    expect(consoleLog).toBeCalledWith(
+      ' Current value: %cnull',
+      'color: green; font-weight: bold;',
+    )
+    expect(consoleGroup).toBeCalledWith(
+      `Change in %c<TestComponent /> %c@ ${new Date().toLocaleTimeString()}`,
+      'color: DodgerBlue',
+      'color: SlateGray; font-weight: thin;',
+    )
+    expect(consoleLog).toBeCalledWith(
+      'Previous value: %cnull',
+      'color: SlateGray; font-weight: thin;',
+    )
+    expect(consoleLog).toBeCalledWith(
+      ' Current value: %cnull',
+      'color: green; font-weight: bold;',
+    )
     expect(consoleLog).toBeCalledTimes(5)
+    expect(consoleGroup).toBeCalledTimes(3)
 
+    /*
+     * Check first change
+     */
+    await act(() => {
+      jest.advanceTimersByTime(1000)
+      logRerender()
+    })
+    expect(consoleGroup).toBeCalledWith(
+      `Change in %c<TestComponent /> %c@ ${new Date().toLocaleTimeString()}`,
+      'color: DodgerBlue',
+      'color: SlateGray; font-weight: thin;',
+    )
+    expect(consoleLog).toBeCalledWith(
+      'Previous value: %cnull',
+      'color: SlateGray; font-weight: thin;',
+    )
+    expect(consoleLog).toBeCalledWith(
+      ' Current value: %conChange 1s',
+      'color: green; font-weight: bold;',
+    )
+    expect(consoleLog).toBeCalledTimes(7)
+    expect(consoleGroup).toBeCalledTimes(4)
+
+    /*
+     * Check second change
+     */
+    await act(() => {
+      jest.advanceTimersByTime(1000)
+      logRerender()
+    })
+    expect(consoleGroup).toBeCalledWith(
+      `Change in %c<TestComponent /> %c@ ${new Date().toLocaleTimeString()}`,
+      'color: DodgerBlue',
+      'color: SlateGray; font-weight: thin;',
+    )
+    expect(consoleLog).toBeCalledWith(
+      'Previous value: %conChange 1s',
+      'color: SlateGray; font-weight: thin;',
+    )
+    expect(consoleLog).toBeCalledWith(
+      ' Current value: %conChange 2s',
+      'color: green; font-weight: bold;',
+    )
+    expect(consoleLog).toBeCalledTimes(9)
+    expect(consoleGroup).toBeCalledTimes(5)
+
+    /*
+     * Check unmount change
+     */
     await act(() => {
       logUnmount()
     })
-    expect(consoleLog).toBeCalledWith('On unmount: null')
-    expect(consoleLog).toBeCalledWith('Before unmount: onChange 2s')
-    expect(consoleLog).toBeCalledTimes(7)
+    expect(consoleGroup).toBeCalledWith(
+      `Unmount in %c<TestComponent /> %c@ ${new Date().toLocaleTimeString()}`,
+      'color: DodgerBlue',
+      'color: SlateGray; font-weight: thin;',
+    )
+    expect(consoleLog).toBeCalledWith(
+      'Previous value: %conChange 2s',
+      'color: SlateGray; font-weight: thin;',
+    )
+    expect(consoleLog).toBeCalledWith(
+      ' Current value: %cnull',
+      'color: green; font-weight: bold;',
+    )
+    expect(consoleLog).toBeCalledTimes(11)
+    expect(consoleGroup).toBeCalledTimes(6)
   })
 })
