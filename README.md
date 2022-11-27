@@ -22,13 +22,13 @@
 React hook for logging per component lifecycle
 
 ## Features
-- 🪶 **Lightweight** — under *500B* gzipped
+- 🪶 **Lightweight** — under *1Kb* gzipped
 - 🗂️ **Typed** — made with TypeScript, ships with types
 - 🥰 **Simple** — don't worry about any changes in your props & state
 - 🔧 **Customizable** — work in progress 😉
 - 🔬 **Tested** — up to 100% coverage
 - 🏎️ **Fast** — native react hooks & optimized
-- 📭 **Minimal dependecies** — only some lodash functions
+- 📭 **No dependecies**
 
 
 

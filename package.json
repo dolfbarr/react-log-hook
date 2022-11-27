@@ -111,8 +111,5 @@
       "path": "dist/module.js",
       "limit": "1 kB"
     }
-  ],
-  "dependencies": {
-    "lodash": "^4.17.21"
-  }
+  ]
 }

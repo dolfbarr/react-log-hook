@@ -1,4 +1,3 @@
-import cloneDeep from 'lodash/cloneDeep'
 import { useEffect, useRef } from 'react'
 
 const CSS_COMPONENT = 'color: DodgerBlue'
@@ -23,23 +22,22 @@ export enum PrintTypes {
 }
 
 export function useLog(): UseLogReturn {
-  const componentName = (function getComponentName() {
-    try {
-      throw new Error()
-    } catch (error) {
-      if (error instanceof Error) {
-        const re = /(\w+)@|at (\w+) \(/g
+  const componentName =
+    (function getComponentName() {
+      try {
+        throw new Error()
+      } catch (error) {
+        if (error instanceof Error) {
+          const re = /(\w+)@|at (\w+) \(/g
 
-        re.exec(error?.stack ?? '')
-        re.exec(error?.stack ?? '')
-        const m = re.exec(error?.stack ?? '') ?? []
+          re.exec(error?.stack ?? '')
+          re.exec(error?.stack ?? '')
+          const m = re.exec(error?.stack ?? '') ?? []
 
-        return String(m[1] || m[2])
+          return String(m[1] || m[2])
+        }
       }
-
-      return ''
-    }
-  })()
+    })() ?? ''
 
   const getGroupLabel = (type: PrintTypes): string => {
     return `${String(type)} ${
@@ -59,7 +57,7 @@ export function useLog(): UseLogReturn {
   }
 
   function log<T>(value: T): void {
-    const clonedValue = cloneDeep(value)
+    const clonedValue = JSON.parse(JSON.stringify(value))
 
     return (() => {
       const isUnmounting = useRef(false)
