@@ -42,7 +42,7 @@ export function useLog(): UseLogReturn {
       }
     })() ?? ''
 
-  const getGroupLabel = (type: PrintTypes): string => {
+  function getGroupLabel(type: PrintTypes): string {
     return `${String(type)} ${
       componentName ? 'in %c<' + String(componentName) + ' /> ' : '%c'
     }%c@ ${new Date().toLocaleTimeString()}`
@@ -75,15 +75,15 @@ export function useLog(): UseLogReturn {
     const prevValueRef = useRef<T>()
 
     if (ALLOWED_NODE_ENVS.includes(process.env.NODE_ENV ?? '')) {
-      return (() => {
+      return (function logHooks() {
         const isUnmounting = useRef(false)
-        useEffect(() => {
-          return () => {
+        useEffect(function setIsUnmounting() {
+          return function setIsUnmountingOnMount() {
             isUnmounting.current = true
           }
         }, [])
 
-        useEffect(() => {
+        useEffect(function onMount() {
           print({
             label: 'On mount',
             value: clonedValue,
@@ -92,7 +92,7 @@ export function useLog(): UseLogReturn {
 
           prevValueRef.current = value
 
-          return () => {
+          return function onUnmount() {
             print({
               label: 'On unmount',
               value: clonedValue,
@@ -102,16 +102,19 @@ export function useLog(): UseLogReturn {
           }
         }, [])
 
-        useEffect(() => {
-          print({
-            label: 'On change',
-            value: clonedValue,
-            type: PrintTypes.Change,
-            prevValue: prevValueRef.current,
-          })
+        useEffect(
+          function onChange() {
+            print({
+              label: 'On change',
+              value: clonedValue,
+              type: PrintTypes.Change,
+              prevValue: prevValueRef.current,
+            })
 
-          prevValueRef.current = value
-        }, [value])
+            prevValueRef.current = value
+          },
+          [value],
+        )
       })()
     }
   }

@@ -4,10 +4,10 @@ import '@storybook/addon-console'
 import '@storybook/addon-actions/register'
 import { useLog } from '.'
 
-export const App = (): React.ReactElement => {
+export function App(): React.ReactElement {
   const [isExampleMounted, setIsExampleMounted] = useState<boolean>(true)
 
-  setTimeout(() => {
+  setTimeout(function setIsMounted() {
     setIsExampleMounted(false)
   }, 3000)
 
@@ -20,24 +20,24 @@ export const App = (): React.ReactElement => {
   )
 }
 
-export const ExampleComponent = (): React.ReactElement => {
+export function ExampleComponent(): React.ReactElement {
   const { log } = useLog()
   const [state, setState] = useState<string | null>(null)
 
   log(state)
 
-  useEffect(() => {
+  useEffect(function setStateMount() {
     setState('onMount')
 
-    setTimeout(() => {
+    setTimeout(function setStateChange1() {
       setState('onChange 1s')
     }, 1000)
 
-    setTimeout(() => {
+    setTimeout(function setStateChange2() {
       setState('onChange 2s')
     }, 2000)
 
-    return () => {
+    return function setStateUnmount() {
       setState('onUnmount')
     }
   }, [])
