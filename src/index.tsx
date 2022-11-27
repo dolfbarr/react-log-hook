@@ -4,6 +4,8 @@ const CSS_COMPONENT = 'color: DodgerBlue'
 const CSS_CHANGE = 'color: green; font-weight: bold;'
 const CSS_SUB_VALUE = 'color: SlateGray; font-weight: thin;'
 
+const ALLOWED_NODE_ENVS = ['dev', 'development']
+
 export interface UseLogReturn {
   log: <T>(value: T) => void
 }
@@ -72,44 +74,46 @@ export function useLog(): UseLogReturn {
     const clonedValue = JSON.parse(JSON.stringify(value))
     const prevValueRef = useRef<T>()
 
-    return (() => {
-      const isUnmounting = useRef(false)
-      useEffect(() => {
-        return () => {
-          isUnmounting.current = true
-        }
-      }, [])
+    if (ALLOWED_NODE_ENVS.includes(process.env.NODE_ENV ?? '')) {
+      return (() => {
+        const isUnmounting = useRef(false)
+        useEffect(() => {
+          return () => {
+            isUnmounting.current = true
+          }
+        }, [])
 
-      useEffect(() => {
-        print({
-          label: 'On mount',
-          value: clonedValue,
-          type: PrintTypes.Mount,
-        })
-
-        prevValueRef.current = value
-
-        return () => {
+        useEffect(() => {
           print({
-            label: 'On unmount',
+            label: 'On mount',
             value: clonedValue,
-            type: PrintTypes.Unmount,
+            type: PrintTypes.Mount,
+          })
+
+          prevValueRef.current = value
+
+          return () => {
+            print({
+              label: 'On unmount',
+              value: clonedValue,
+              type: PrintTypes.Unmount,
+              prevValue: prevValueRef.current,
+            })
+          }
+        }, [])
+
+        useEffect(() => {
+          print({
+            label: 'On change',
+            value: clonedValue,
+            type: PrintTypes.Change,
             prevValue: prevValueRef.current,
           })
-        }
-      }, [])
 
-      useEffect(() => {
-        print({
-          label: 'On change',
-          value: clonedValue,
-          type: PrintTypes.Change,
-          prevValue: prevValueRef.current,
-        })
-
-        prevValueRef.current = value
-      }, [value])
-    })()
+          prevValueRef.current = value
+        }, [value])
+      })()
+    }
   }
 
   return { log }

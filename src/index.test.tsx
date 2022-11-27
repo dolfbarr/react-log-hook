@@ -3,16 +3,21 @@ import { act, renderHook } from '@testing-library/react'
 import { useEffect, useState } from 'react'
 
 describe('useLog', () => {
+  const OLD_ENV = process.env
   const consoleLog = jest.spyOn(console, 'log').mockImplementation(() => {})
   const consoleGroup = jest.spyOn(console, 'group').mockImplementation(() => {})
 
   beforeEach(() => {
     jest.useFakeTimers()
+    jest.resetModules()
+    process.env = { ...OLD_ENV }
+    process.env.NODE_ENV = 'dev'
   })
 
   afterEach(() => {
     jest.runOnlyPendingTimers()
     jest.useRealTimers()
+    process.env = OLD_ENV
   })
 
   it('exists', () => {
@@ -162,5 +167,13 @@ describe('useLog', () => {
     )
     expect(consoleLog).toBeCalledTimes(11)
     expect(consoleGroup).toBeCalledTimes(6)
+  })
+
+  it('does not render anything in production', () => {
+    process.env.NODE_ENV = 'production'
+
+    const { result } = renderHook(useLog)
+    renderHook(() => result.current.log('Test'))
+    expect(consoleLog).not.toBeCalled()
   })
 })
