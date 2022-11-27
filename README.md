@@ -1,4 +1,9 @@
 <div align="center">
+  <div align="center">
+  <img src="./react-log-hook-screenshot.png" alt="React Log Hook Screenshot" width=400 />
+  <br>
+  <br>
+  </div>
   <img src="https://badgen.net/npm/v/react-log-hook" alt="NPM Version" />
    <img src="https://badgen.net/npm/license/react-log-hook" alt="License" />
   <img src="https://badgen.net/bundlephobia/minzip/react-log-hook" alt="minzipped size"/>
@@ -66,16 +71,27 @@ const App = () => {
 
 ## FAQ
 
-Comming Soon!
+### Will it deep copy the value to make sure it will persist in the logs?
+
+- 🎉 Yes, 🪵 **react-log-hook** deep copies the value to make sure it will not be changed in the logs later
+
+### Do i need to install @types/react-log-hook as well?
+
+- 💪 No, 🪵 **react-log-hook** comes with prebundled types
+
+### Will it run in production evironment?
+
+- ✅ By default 🪵 **react-log-hook** will run only in `dev` or `development` node evironments defined by `NODE_ENV`
 
 ## Roadmap
 
-- [ ] Add previous state checking
-- [ ] Use object copy to persist in time
-- [ ] Use console groups to handle all the logs
+- [x] Add previous state checking
+- [x] Use object copy to persist in time
+- [x] Use console groups to handle all the logs
+- [x] Add dev environment support by default
+- [x] Polish the looks with component names, function calls, time etc
+- [ ] Add more customization options
 - [ ] Support SSR & Server components
-- [ ] Polish the looks with component names, function calls, time etc
-- [ ] TBD
 
 ## Contributing
 
