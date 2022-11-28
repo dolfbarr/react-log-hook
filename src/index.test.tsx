@@ -170,21 +170,13 @@ describe('useLog', () => {
     expect(consoleLog).toBeCalledTimes(11)
     expect(consoleGroup).toBeCalledTimes(6)
   })
-
-  it('does not render anything in production', () => {
-    process.env.NODE_ENV = 'production'
-
-    const { result } = renderHook(useLog)
-    renderHook(() => result.current.log('Test'))
-    expect(consoleLog).not.toBeCalled()
-  })
-
   it('renders hook with custom styles', () => {
     renderHook(() => {
       const { log } = useLog({ styles: { componentCSS: 'color: darkBlue;' } })
       log('Test')
     })
 
+    // first call, second parameter (css for component name) should be modified
     expect(consoleGroup.mock.calls[0][1]).toBe('color: darkBlue;')
   })
 
@@ -194,7 +186,37 @@ describe('useLog', () => {
       log('Test', { styles: { componentCSS: 'color: darkRed;' } })
     })
 
-    expect(consoleGroup.mock.calls[1][1]).toBe('color: darkRed;')
+    // first call, second parameter (css for component name) should be modified
+    expect(consoleGroup.mock.calls[0][1]).toBe('color: darkRed;')
+  })
+
+  it('renders log with custom styles for subValueCSS', () => {
+    renderHook(() => {
+      const { log } = useLog({ styles: { subValueCSS: 'color: darkBlue;' } })
+      log('Test', { styles: { subValueCSS: 'color: darkRed;' } })
+    })
+
+    // first call, third parameter (css for call time) should be modified
+    expect(consoleGroup.mock.calls[0][2]).toBe('color: darkRed;')
+  })
+
+  it('renders log with custom styles for changeCSS', () => {
+    renderHook(() => {
+      const { log } = useLog({ styles: { changeCSS: 'color: darkBlue;' } })
+      log('Test', { styles: { changeCSS: 'color: darkRed;' } })
+    })
+
+    // third call, third parameter (css for new value) should be modified
+    expect(consoleLog.mock.calls[2][1]).toBe('color: darkRed;')
+  })
+
+  it('does not render anything in production', () => {
+    process.env.NODE_ENV = 'production'
+
+    const { result } = renderHook(useLog)
+    renderHook(() => result.current.log('Test'))
+
+    expect(consoleLog).not.toBeCalled()
   })
 
   it('renders anything in custom allowed environments', () => {
@@ -206,5 +228,14 @@ describe('useLog', () => {
     })
 
     expect(consoleLog).toBeCalled()
+  })
+
+  it('falls back to production for empty node_env', () => {
+    process.env.NODE_ENV = undefined
+
+    const { result } = renderHook(useLog)
+    renderHook(() => result.current.log('Test'))
+
+    expect(consoleLog).not.toBeCalled()
   })
 })
