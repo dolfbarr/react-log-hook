@@ -12,6 +12,7 @@ export interface UseLog {
     changeCSS?: string
     subValueCSS?: string
   }
+  environments?: string[]
 }
 
 export type Log = UseLog
@@ -40,6 +41,7 @@ export function useLog({
     changeCSS = CSS_CHANGE,
     subValueCSS = CSS_SUB_VALUE,
   } = {},
+  environments = ALLOWED_NODE_ENVS,
 }: UseLog = {}): UseLogReturn {
   const componentName =
     (function getComponentName() {
@@ -97,7 +99,7 @@ export function useLog({
       console.groupEnd()
     }
 
-    if (ALLOWED_NODE_ENVS.includes(process.env.NODE_ENV ?? '')) {
+    if (environments.includes(process.env.NODE_ENV ?? '')) {
       return (function logHooks() {
         const isUnmounting = useRef(false)
         useEffect(function setIsUnmounting() {
