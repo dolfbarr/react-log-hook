@@ -6,8 +6,18 @@ const CSS_SUB_VALUE = 'color: SlateGray; font-weight: thin;'
 
 const ALLOWED_NODE_ENVS = ['dev', 'development']
 
+export interface UseLog {
+  styles?: {
+    componentCSS?: string
+    changeCSS?: string
+    subValueCSS?: string
+  }
+}
+
+export type Log = UseLog
+
 export interface UseLogReturn {
-  log: <T>(value: T) => void
+  log: <T>(value: T, props?: Log) => void
 }
 
 interface PrintProps<T> {
@@ -24,7 +34,13 @@ export enum PrintTypes {
   Change = 'Change',
 }
 
-export function useLog(): UseLogReturn {
+export function useLog({
+  styles: {
+    componentCSS = CSS_COMPONENT,
+    changeCSS = CSS_CHANGE,
+    subValueCSS = CSS_SUB_VALUE,
+  } = {},
+}: UseLog = {}): UseLogReturn {
   const componentName =
     (function getComponentName() {
       try {
@@ -48,31 +64,38 @@ export function useLog(): UseLogReturn {
     }%c@ ${new Date().toLocaleTimeString()}`
   }
 
-  function print<T>({
-    value,
-    label,
-    prevValue,
-    type = PrintTypes.Change,
-    group = getGroupLabel(type),
-  }: PrintProps<T>): void {
-    console.group(group, CSS_COMPONENT, CSS_SUB_VALUE)
-
-    if (!('prevValue' in arguments[0])) {
-      console.log(`${label.padStart(14, ' ')}: ${String(value)}`)
-    } else {
-      console.log(
-        `Previous value: %c${String(arguments[0].prevValue)}`,
-        CSS_SUB_VALUE,
-      )
-      console.log(` Current value: %c${String(value)}`, CSS_CHANGE)
-    }
-
-    console.groupEnd()
-  }
-
-  function log<T>(value: T): void {
+  function log<T>(value: T, props?: Log): void {
     const clonedValue = JSON.parse(JSON.stringify(value))
     const prevValueRef = useRef<T>()
+
+    function print<T>({
+      value,
+      label,
+      prevValue,
+      type = PrintTypes.Change,
+      group = getGroupLabel(type),
+    }: PrintProps<T>): void {
+      console.group(
+        group,
+        props?.styles?.componentCSS ?? componentCSS,
+        props?.styles?.subValueCSS ?? subValueCSS,
+      )
+
+      if (!('prevValue' in arguments[0])) {
+        console.log(`${label.padStart(14, ' ')}: ${String(value)}`)
+      } else {
+        console.log(
+          `Previous value: %c${String(arguments[0].prevValue)}`,
+          props?.styles?.subValueCSS ?? subValueCSS,
+        )
+        console.log(
+          ` Current value: %c${String(value)}`,
+          props?.styles?.changeCSS ?? changeCSS,
+        )
+      }
+
+      console.groupEnd()
+    }
 
     if (ALLOWED_NODE_ENVS.includes(process.env.NODE_ENV ?? '')) {
       return (function logHooks() {

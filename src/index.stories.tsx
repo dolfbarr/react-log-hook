@@ -21,13 +21,16 @@ export function App(): React.ReactElement {
 }
 
 export function ExampleComponent(): React.ReactElement {
-  const { log } = useLog()
+  const { log } = useLog({ styles: { componentCSS: 'color: darkBlue;' } })
   const [state, setState] = useState<string | null>(null)
+  const [anotherState, setAnotherState] = useState<string | null>(null)
 
   log(state)
+  log(anotherState, { styles: { componentCSS: 'color: darkRed;' } })
 
   useEffect(function setStateMount() {
     setState('onMount')
+    setAnotherState('onMount')
 
     setTimeout(function setStateChange1() {
       setState('onChange 1s')

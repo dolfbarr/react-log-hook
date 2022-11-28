@@ -4,8 +4,8 @@ import { useEffect, useState } from 'react'
 
 describe('useLog', () => {
   const OLD_ENV = process.env
-  const consoleLog = jest.spyOn(console, 'log').mockImplementation(() => {})
-  const consoleGroup = jest.spyOn(console, 'group').mockImplementation(() => {})
+  const consoleLog = jest.spyOn(console, 'log')
+  const consoleGroup = jest.spyOn(console, 'group')
 
   beforeEach(() => {
     jest.useFakeTimers()
@@ -175,5 +175,23 @@ describe('useLog', () => {
     const { result } = renderHook(useLog)
     renderHook(() => result.current.log('Test'))
     expect(consoleLog).not.toBeCalled()
+  })
+
+  it('renders hook with custom styles', () => {
+    renderHook(() => {
+      const { log } = useLog({ styles: { componentCSS: 'color: darkBlue;' } })
+      log('Test')
+    })
+
+    expect(consoleGroup.mock.calls[0][1]).toBe('color: darkBlue;')
+  })
+
+  it('renders log with custom styles', () => {
+    renderHook(() => {
+      const { log } = useLog({ styles: { componentCSS: 'color: darkBlue;' } })
+      log('Test', { styles: { componentCSS: 'color: darkRed;' } })
+    })
+
+    expect(consoleGroup.mock.calls[1][1]).toBe('color: darkRed;')
   })
 })
