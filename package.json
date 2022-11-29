@@ -10,7 +10,6 @@
   },
   "scripts": {
     "start:demo": "parcel demo/index.html --dist-dir ./build",
-    "start": "del-cli 'dist/*' && parcel src/index.tsx --dist-dir ./dist",
     "build": "del-cli 'dist/*' && parcel build src/index.tsx --dist-dir ./dist && npm run size",
     "test": "jest",
     "lint": "npx eslint \"./**/*.ts\" --cache --cache-strategy content",

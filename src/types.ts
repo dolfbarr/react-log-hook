@@ -35,12 +35,25 @@ export interface Styles {
 }
 
 /** Describes configuration object at component level */
-export interface UseLogConfig {
+export type UseLogConfig = {
   /** Contains styles object with different CSS inline styles used in logging */
   styles?: Styles
   /** Contains array of environments of `process.env.NODE_ENV` in which logging will be allowed  */
   environments?: string[]
-}
+} & (
+  | {
+      /** Enable grouping for logs  */
+      isGroupingEnabled?: boolean
+      /** Render groups collapsed  */
+      isGroupCollapsed?: boolean
+    }
+  | {
+      /** Enable grouping for logs  */
+      isGroupingEnabled?: false
+      /** Render groups collapsed  */
+      isGroupCollapsed?: never
+    }
+)
 
 /** Describes configuration object at call level, can be used to override configuration */
 export type LogConfig = UseLogConfig
@@ -65,7 +78,22 @@ export interface _PrintConfig<T> {
   type?: _PrintTypes
   styles?: Styles
   componentName: string
+  flags?: _PrintFlags
 }
+
+/**
+ * Describes possible flags for internal print configuration
+ * @internal
+ */
+export type _PrintFlags =
+  | {
+      isGrouped?: boolean
+      isCollapsed?: boolean
+    }
+  | {
+      isGrouped?: false
+      isCollapsed?: never
+    }
 
 /**
  * Label types of print groups

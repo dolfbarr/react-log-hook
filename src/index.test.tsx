@@ -8,6 +8,9 @@ describe('useLog', () => {
   const consoleGroup = jest
     .spyOn(console, 'group')
     .mockImplementation(() => null)
+  const consoleGroupCollapsed = jest
+    .spyOn(console, 'groupCollapsed')
+    .mockImplementation(() => null)
 
   beforeEach(() => {
     jest.useFakeTimers()
@@ -237,5 +240,28 @@ describe('useLog', () => {
     renderHook(() => result.current.log('Test'))
 
     expect(consoleLog).not.toBeCalled()
+  })
+
+  it('renders log with disabled groups', () => {
+    renderHook(() => {
+      const { log } = useLog({ isGroupingEnabled: true })
+      log('Test', { isGroupingEnabled: false })
+    })
+
+    expect(consoleGroup).not.toHaveBeenCalled()
+  })
+
+  it('renders log with disabled groups', () => {
+    renderHook(() => {
+      const { log } = useLog({ isGroupingEnabled: false })
+      log('Test', { isGroupingEnabled: true, isGroupCollapsed: true })
+    })
+
+    expect(consoleGroup).not.toHaveBeenCalled()
+    expect(consoleGroupCollapsed).toHaveBeenCalled()
+    // first call, first parameter for group name should exist
+    expect(consoleGroupCollapsed.mock.calls[0][0]).toBe(
+      `Mount in %c<TestComponent /> %c@ ${new Date().toLocaleTimeString()}`,
+    )
   })
 })

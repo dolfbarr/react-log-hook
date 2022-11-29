@@ -35,11 +35,20 @@ export function print<T>({
   label,
   prevValue,
   componentName,
+  flags = {
+    isCollapsed: false,
+    isGrouped: true,
+  },
   type = _PrintTypes.Change,
   group = getGroupLabel(type, componentName),
   styles: { componentCSS, subValueCSS, changeCSS } = {},
 }: _PrintConfig<T>): void {
-  console.group(group, componentCSS, subValueCSS)
+  flags.isGrouped &&
+    console[flags.isCollapsed ? 'groupCollapsed' : 'group'](
+      group,
+      componentCSS,
+      subValueCSS,
+    )
 
   if (!('prevValue' in arguments[0])) {
     console.log(`${label.padStart(14, ' ')}: ${String(value)}`)
@@ -51,5 +60,5 @@ export function print<T>({
     console.log(` Current value: %c${String(value)}`, changeCSS)
   }
 
-  console.groupEnd()
+  flags.isGrouped && console.groupEnd()
 }

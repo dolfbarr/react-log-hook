@@ -8,12 +8,6 @@
 
 import { useEffect, useRef } from 'react'
 import {
-  ALLOWED_NODE_ENVS,
-  CSS_CHANGE,
-  CSS_COMPONENT,
-  CSS_SUB_VALUE,
-} from './constants'
-import {
   UseLogConfig,
   UseLogReturn,
   LogConfig,
@@ -21,6 +15,12 @@ import {
   _PrintConfig,
 } from './types'
 import { getComponentName, print } from './utils'
+import {
+  ALLOWED_NODE_ENVS,
+  CSS_CHANGE,
+  CSS_COMPONENT,
+  CSS_SUB_VALUE,
+} from './constants'
 
 /**
  * Provides a function to log through react component lifecycle.
@@ -42,6 +42,8 @@ export function useLog({
     subValueCSS = CSS_SUB_VALUE,
   } = {},
   environments = ALLOWED_NODE_ENVS,
+  isGroupingEnabled = true,
+  isGroupCollapsed = false,
 }: UseLogConfig = {}): UseLogReturn {
   const componentName = getComponentName()
 
@@ -63,7 +65,7 @@ export function useLog({
     const prevValueRef = useRef<T>()
     const printProps: Pick<
       _PrintConfig<T>,
-      'value' | 'styles' | 'componentName'
+      'value' | 'styles' | 'componentName' | 'flags'
     > = {
       value: clonedValue,
       styles: {
@@ -72,6 +74,10 @@ export function useLog({
         changeCSS: props?.styles?.changeCSS ?? changeCSS,
       },
       componentName,
+      flags: {
+        isGrouped: props?.isGroupingEnabled ?? isGroupingEnabled,
+        isCollapsed: props?.isGroupCollapsed ?? isGroupCollapsed,
+      },
     }
 
     if (environments.includes(process.env.NODE_ENV ?? 'production')) {

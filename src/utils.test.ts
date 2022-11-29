@@ -27,6 +27,9 @@ describe('utils', () => {
     const consoleGroup = jest
       .spyOn(console, 'group')
       .mockImplementation(() => null)
+    const consoleGroupCollapsed = jest
+      .spyOn(console, 'groupCollapsed')
+      .mockImplementation(() => null)
     const consoleGroupEnd = jest
       .spyOn(console, 'groupEnd')
       .mockImplementation(() => null)
@@ -67,6 +70,38 @@ describe('utils', () => {
         undefined,
       )
       expect(consoleLog).toHaveBeenCalledTimes(2)
+      expect(consoleGroupEnd).toHaveBeenCalled()
+    })
+
+    it('does not print group per config', () => {
+      print({
+        ...printProps,
+        flags: {
+          isGrouped: false,
+        },
+      })
+
+      expect(consoleGroup).not.toHaveBeenCalled()
+      expect(consoleLog).toHaveBeenCalledWith('       A Label: Test Value')
+      expect(consoleGroupEnd).not.toHaveBeenCalled()
+    })
+
+    it('prints collapsed group per config', () => {
+      print({
+        ...printProps,
+        flags: {
+          isGrouped: true,
+          isCollapsed: true,
+        },
+      })
+
+      expect(consoleGroup).not.toHaveBeenCalled()
+      expect(consoleGroupCollapsed).toHaveBeenCalledWith(
+        `Change in %c<SomeComponentName /> %c@ ${new Date().toLocaleTimeString()}`,
+        undefined,
+        undefined,
+      )
+      expect(consoleLog).toHaveBeenCalledWith('       A Label: Test Value')
       expect(consoleGroupEnd).toHaveBeenCalled()
     })
   })
