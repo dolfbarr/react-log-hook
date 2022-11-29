@@ -105,7 +105,7 @@ const App = () => {
 > Starts a demo app with enabled hook to check it in real environment
 
 #### `npm run storybook`
-> Starts storybook with exmaple components to test against
+> Starts storybook with example components to test against
 
 #### `npm run release:check`
 > Combination of linting, type-checking & tests; runs as precommit hook
