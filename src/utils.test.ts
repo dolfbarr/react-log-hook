@@ -1,16 +1,16 @@
 import { getGroupLabel, getComponentName, print } from './utils'
-import { PrintProps, PrintTypes } from './types'
+import { _PrintConfig, _PrintTypes } from './types'
 
 describe('utils', () => {
   describe('getGroupLabel', () => {
     it('renders', () => {
-      expect(getGroupLabel(PrintTypes.Change)).toEqual(
+      expect(getGroupLabel(_PrintTypes.Change)).toEqual(
         `Change %c%c@ ${new Date().toLocaleTimeString()}`,
       )
     })
 
     it('renders with component name', () => {
-      expect(getGroupLabel(PrintTypes.Mount, 'TestComponent')).toEqual(
+      expect(getGroupLabel(_PrintTypes.Mount, 'TestComponent')).toEqual(
         `Mount in %c<TestComponent /> %c@ ${new Date().toLocaleTimeString()}`,
       )
     })
@@ -31,7 +31,7 @@ describe('utils', () => {
       .spyOn(console, 'groupEnd')
       .mockImplementation(() => null)
 
-    const printProps: PrintProps<string> = {
+    const printProps: _PrintConfig<string> = {
       value: 'Test Value',
       label: 'A Label',
       componentName: 'SomeComponentName',

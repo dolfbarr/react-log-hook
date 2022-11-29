@@ -1,7 +1,7 @@
-import { PrintProps, PrintTypes } from './types'
+import { _PrintConfig, _PrintTypes } from './types'
 
 export function getGroupLabel(
-  type: PrintTypes,
+  type: _PrintTypes,
   componentName?: string,
 ): string {
   return `${String(type)} ${
@@ -35,10 +35,10 @@ export function print<T>({
   label,
   prevValue,
   componentName,
-  type = PrintTypes.Change,
+  type = _PrintTypes.Change,
   group = getGroupLabel(type, componentName),
   styles: { componentCSS, subValueCSS, changeCSS } = {},
-}: PrintProps<T>): void {
+}: _PrintConfig<T>): void {
   console.group(group, componentCSS, subValueCSS)
 
   if (!('prevValue' in arguments[0])) {

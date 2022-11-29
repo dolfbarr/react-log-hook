@@ -1,13 +1,40 @@
+// Copyright (c) Dolf Barr <mail@dolf.me>. All rights reserved. Licensed under the MIT license.
+
+/**
+ * A react hook for logging through component lifecycle.
+ *
+ * @packageDocumentation
+ */
+
 import { useEffect, useRef } from 'react'
-import { UseLog, UseLogReturn, Log, PrintTypes, PrintProps } from './types'
+import {
+  ALLOWED_NODE_ENVS,
+  CSS_CHANGE,
+  CSS_COMPONENT,
+  CSS_SUB_VALUE,
+} from './constants'
+import {
+  UseLogConfig,
+  UseLogReturn,
+  LogConfig,
+  _PrintTypes,
+  _PrintConfig,
+} from './types'
 import { getComponentName, print } from './utils'
 
-const CSS_COMPONENT = 'color: DodgerBlue'
-const CSS_CHANGE = 'color: green; font-weight: bold;'
-const CSS_SUB_VALUE = 'color: SlateGray; font-weight: thin;'
-
-const ALLOWED_NODE_ENVS = ['dev', 'development']
-
+/**
+ * Provides a function to log through react component lifecycle.
+ *
+ * @param config - component level configuration for any log function in the component
+ * @see {@link UseLogConfig} for the config data structure
+ *
+ * @returns set of functions suitable for logging
+ *
+ * @example
+ * ```ts
+ * const {log} = useLog({environments: ['dev']})
+ * ```
+ */
 export function useLog({
   styles: {
     componentCSS = CSS_COMPONENT,
@@ -15,14 +42,27 @@ export function useLog({
     subValueCSS = CSS_SUB_VALUE,
   } = {},
   environments = ALLOWED_NODE_ENVS,
-}: UseLog = {}): UseLogReturn {
+}: UseLogConfig = {}): UseLogReturn {
   const componentName = getComponentName()
 
-  function log<T>(value: T, props?: Log): void {
+  /**
+   * Logging function to log through react component lifecycle.
+   *
+   * @param value - a value which changes will be logged
+   * @typeParam T - type of the tracking value
+   * @param config - component level configuration for any log function in the component
+   * @see {@link LogConfig} for the config data structure
+   *
+   * @example
+   * ```ts
+   * log(someState, {environments: ['production']})
+   * ```
+   */
+  function log<T>(value: T, props?: LogConfig): void {
     const clonedValue = JSON.parse(JSON.stringify(value)) as T
     const prevValueRef = useRef<T>()
     const printProps: Pick<
-      PrintProps<T>,
+      _PrintConfig<T>,
       'value' | 'styles' | 'componentName'
     > = {
       value: clonedValue,
@@ -37,6 +77,7 @@ export function useLog({
     if (environments.includes(process.env.NODE_ENV ?? 'production')) {
       function logHooks(): void {
         const isUnmounting = useRef(false)
+
         useEffect(function setIsUnmounting() {
           return function setIsUnmountingOnMount() {
             isUnmounting.current = true
@@ -46,7 +87,7 @@ export function useLog({
         useEffect(function onMount() {
           print({
             label: 'On mount',
-            type: PrintTypes.Mount,
+            type: _PrintTypes.Mount,
             ...printProps,
           })
 
@@ -55,7 +96,7 @@ export function useLog({
           return function onUnmount() {
             print({
               label: 'On unmount',
-              type: PrintTypes.Unmount,
+              type: _PrintTypes.Unmount,
               prevValue: prevValueRef.current,
               ...printProps,
             })
@@ -66,7 +107,7 @@ export function useLog({
           function onChange() {
             print({
               label: 'On change',
-              type: PrintTypes.Change,
+              type: _PrintTypes.Change,
               prevValue: prevValueRef.current,
               ...printProps,
             })
