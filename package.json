@@ -12,7 +12,7 @@
     "start:demo": "parcel demo/index.html --dist-dir ./build",
     "build": "del-cli 'dist/*' && parcel build src/index.tsx --dist-dir ./dist && npm run size",
     "test": "jest",
-    "lint": "npx eslint \"./**/*.ts\" --cache --cache-strategy content",
+    "lint": "eslint \"./**/*.ts\" --cache --cache-strategy content",
     "type:check": "tsc --noEmit true",
     "storybook": "start-storybook -p 6006",
     "build:storybook": "build-storybook",
