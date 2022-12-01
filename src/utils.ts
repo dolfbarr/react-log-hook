@@ -1,4 +1,4 @@
-import { _PrintConfig, _PrintTypes } from './types'
+import { Printer, _PrintConfig, _PrintTypes, _SupportedConsole } from './types'
 
 export function getGroupLabel(
   type: _PrintTypes,
@@ -30,6 +30,16 @@ export function getComponentName(): string {
   }
 }
 
+export function getPrinter(
+  printer: Printer | Console,
+  method: keyof _SupportedConsole,
+): _SupportedConsole[keyof _SupportedConsole] {
+  return (
+    (printer && method in printer ? printer[method] : console[method]) ??
+    console[method]
+  )
+}
+
 export function print<T>({
   value,
   label,
@@ -42,23 +52,28 @@ export function print<T>({
   type = _PrintTypes.Change,
   group = getGroupLabel(type, componentName),
   styles: { componentCSS, subValueCSS, changeCSS } = {},
+  printer = {},
 }: _PrintConfig<T>): void {
-  flags.isGrouped &&
-    console[flags.isCollapsed ? 'groupCollapsed' : 'group'](
-      group,
-      componentCSS,
-      subValueCSS,
-    )
+  const getCurrentPrinter = (
+    method: keyof _SupportedConsole,
+  ): _SupportedConsole[keyof _SupportedConsole] => getPrinter(printer, method)
+  const groupMethod = flags.isCollapsed ? 'groupCollapsed' : 'group'
+
+  if (flags.isGrouped) {
+    getCurrentPrinter(groupMethod)(group, componentCSS, subValueCSS)
+  }
 
   if (!('prevValue' in arguments[0])) {
-    console.log(`${label.padStart(14, ' ')}: ${String(value)}`)
+    getCurrentPrinter('log')(`${label.padStart(14, ' ')}: ${String(value)}`)
   } else {
-    console.log(
+    getCurrentPrinter('log')(
       `Previous value: %c${String(arguments[0].prevValue)}`,
       subValueCSS,
     )
-    console.log(` Current value: %c${String(value)}`, changeCSS)
+    getCurrentPrinter('log')(` Current value: %c${String(value)}`, changeCSS)
   }
 
-  flags.isGrouped && console.groupEnd()
+  if (flags.isGrouped) {
+    getCurrentPrinter('groupEnd')()
+  }
 }

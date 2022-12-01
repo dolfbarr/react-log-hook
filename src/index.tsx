@@ -13,6 +13,7 @@ import {
   LogConfig,
   _PrintTypes,
   _PrintConfig,
+  Printer,
 } from './types'
 import { getComponentName, print } from './utils'
 import {
@@ -44,6 +45,7 @@ export function useLog({
   environments = ALLOWED_NODE_ENVS,
   isGroupingEnabled = true,
   isGroupCollapsed = false,
+  printer = console as Printer,
 }: UseLogConfig = {}): UseLogReturn {
   const componentName = getComponentName()
 
@@ -65,7 +67,7 @@ export function useLog({
     const prevValueRef = useRef<T>()
     const printProps: Pick<
       _PrintConfig<T>,
-      'value' | 'styles' | 'componentName' | 'flags'
+      'value' | 'styles' | 'componentName' | 'flags' | 'printer'
     > = {
       value: clonedValue,
       styles: {
@@ -78,6 +80,7 @@ export function useLog({
         isGrouped: props?.isGroupingEnabled ?? isGroupingEnabled,
         isCollapsed: props?.isGroupCollapsed ?? isGroupCollapsed,
       },
+      printer: props?.printer ?? printer,
     }
 
     if (environments.includes(process.env.NODE_ENV ?? 'production')) {

@@ -1,5 +1,5 @@
-import { getGroupLabel, getComponentName, print } from './utils'
-import { _PrintConfig, _PrintTypes } from './types'
+import { getGroupLabel, getComponentName, print, getPrinter } from './utils'
+import { _PrintConfig, _PrintTypes, Printer } from './types'
 
 describe('utils', () => {
   describe('getGroupLabel', () => {
@@ -19,6 +19,28 @@ describe('utils', () => {
   describe('getComponentName', () => {
     it('gets component name', () => {
       expect(getComponentName()).toEqual('_callCircusTest')
+    })
+  })
+
+  describe('getPrinter', () => {
+    it('returns printer for existing printer method', () => {
+      const printer: Printer = { log: jest.fn() }
+      expect(getPrinter(printer, 'log')).toBe(printer.log)
+    })
+
+    it('returns console for non-existing printer method', () => {
+      const printer: Printer = { log: jest.fn() }
+      expect(getPrinter(printer, 'warn')).toBe(console.warn)
+    })
+
+    it('returns console for empty printer', () => {
+      const printer: Printer = {}
+      expect(getPrinter(printer, 'log')).toBe(console.log)
+    })
+
+    it('returns console for empty printer method', () => {
+      const printer: Printer = { log: undefined }
+      expect(getPrinter(printer, 'log')).toBe(console.log)
     })
   })
 
@@ -102,6 +124,39 @@ describe('utils', () => {
         undefined,
       )
       expect(consoleLog).toHaveBeenCalledWith('       A Label: Test Value')
+      expect(consoleGroupEnd).toHaveBeenCalled()
+    })
+
+    it('prints with custom printer', () => {
+      const printer: Printer = { log: jest.fn() }
+      const printPropsWithPrinter: _PrintConfig<string> = {
+        ...printProps,
+        printer,
+      }
+      const printerLog = jest
+        .spyOn(printer, 'log')
+        .mockImplementation(() => 'Some logs')
+
+      print(printPropsWithPrinter)
+
+      expect(consoleLog).not.toHaveBeenCalled()
+
+      expect(consoleGroup).toHaveBeenCalled()
+      expect(printerLog).toHaveBeenCalled()
+      expect(consoleGroupEnd).toHaveBeenCalled()
+    })
+
+    it('prints with custom empty printer', () => {
+      const printer: Printer = {}
+      const printPropsWithPrinter: _PrintConfig<string> = {
+        ...printProps,
+        printer,
+      }
+
+      print(printPropsWithPrinter)
+
+      expect(consoleGroup).toHaveBeenCalled()
+      expect(consoleLog).toHaveBeenCalled()
       expect(consoleGroupEnd).toHaveBeenCalled()
     })
   })

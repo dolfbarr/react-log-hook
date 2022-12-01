@@ -40,6 +40,8 @@ export type UseLogConfig = {
   styles?: Styles
   /** Contains array of environments of `process.env.NODE_ENV` in which logging will be allowed  */
   environments?: string[]
+  /** Contains custom implementation of console  */
+  printer?: Printer | Console
 } & (
   | {
       /** Enable grouping for logs  */
@@ -79,6 +81,7 @@ export interface _PrintConfig<T> {
   styles?: Styles
   componentName: string
   flags?: _PrintFlags
+  printer?: Printer | Console
 }
 
 /**
@@ -104,3 +107,22 @@ export enum _PrintTypes {
   Unmount = 'Unmount',
   Change = 'Change',
 }
+
+/**
+ * Supported console methods
+ * @internal
+ */
+export type _SupportedConsole = Pick<
+  Console,
+  | 'group'
+  | 'groupCollapsed'
+  | 'groupEnd'
+  | 'log'
+  | 'info'
+  | 'error'
+  | 'warn'
+  | 'debug'
+>
+
+/** Describes custom implementation of console object with only supported methods used to render logs */
+export type Printer = Partial<_SupportedConsole>

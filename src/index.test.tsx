@@ -264,4 +264,39 @@ describe('useLog', () => {
       `Mount in %c<TestComponent /> %c@ ${new Date().toLocaleTimeString()}`,
     )
   })
+
+  it('renders hook with custom printer', () => {
+    const printer = { log: jest.fn() }
+
+    const printerLog = jest.spyOn(printer, 'log').mockImplementation(() => null)
+
+    renderHook(() => {
+      const { log } = useLog({ printer })
+      log('Test')
+    })
+
+    expect(consoleLog).not.toHaveBeenCalled()
+
+    expect(printerLog).toHaveBeenCalled()
+  })
+
+  it('renders log with custom printer', () => {
+    const printer = { log: jest.fn() }
+    const anotherPrinter = { log: jest.fn() }
+
+    const printerLog = jest.spyOn(printer, 'log').mockImplementation(() => null)
+    const anotherPrinterLog = jest
+      .spyOn(anotherPrinter, 'log')
+      .mockImplementation(() => null)
+
+    renderHook(() => {
+      const { log } = useLog({ printer })
+      log('Test', { printer: anotherPrinter })
+    })
+
+    expect(consoleLog).not.toHaveBeenCalled()
+    expect(printerLog).not.toHaveBeenCalled()
+
+    expect(anotherPrinterLog).toHaveBeenCalled()
+  })
 })
