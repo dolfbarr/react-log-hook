@@ -1,13 +1,16 @@
 import { useLog } from './index'
+import * as utils from './utils'
 import { act, renderHook } from '@testing-library/react'
 import { useEffect, useState } from 'react'
 
 describe('useLog', () => {
   const OLD_ENV = process.env
+  jest.spyOn(utils, 'getCurrentTime').mockReturnValue('09:38 PM')
   const consoleLog = jest.spyOn(console, 'log').mockImplementation(() => null)
   const consoleGroup = jest
     .spyOn(console, 'group')
     .mockImplementation(() => null)
+
   const consoleGroupCollapsed = jest
     .spyOn(console, 'groupCollapsed')
     .mockImplementation(() => null)
@@ -70,14 +73,14 @@ describe('useLog', () => {
      * Set Initial Values
      */
     expect(consoleGroup).toBeCalledWith(
-      `Mount in %c<TestComponent /> %c@ ${new Date().toLocaleTimeString()}`,
+      'Mount in %c<TestComponent /> %c@ 09:38 PM',
       'color: DodgerBlue',
       'color: SlateGray; font-weight: thin;',
     )
     expect(consoleLog).toBeCalledWith('      On mount: null')
 
     expect(consoleGroup).toBeCalledWith(
-      `Change in %c<TestComponent /> %c@ ${new Date().toLocaleTimeString()}`,
+      'Change in %c<TestComponent /> %c@ 09:38 PM',
       'color: DodgerBlue',
       'color: SlateGray; font-weight: thin;',
     )
@@ -90,7 +93,7 @@ describe('useLog', () => {
       'color: green; font-weight: bold;',
     )
     expect(consoleGroup).toBeCalledWith(
-      `Change in %c<TestComponent /> %c@ ${new Date().toLocaleTimeString()}`,
+      'Change in %c<TestComponent /> %c@ 09:38 PM',
       'color: DodgerBlue',
       'color: SlateGray; font-weight: thin;',
     )
@@ -113,7 +116,7 @@ describe('useLog', () => {
       logRerender()
     })
     expect(consoleGroup).toBeCalledWith(
-      `Change in %c<TestComponent /> %c@ ${new Date().toLocaleTimeString()}`,
+      'Change in %c<TestComponent /> %c@ 09:38 PM',
       'color: DodgerBlue',
       'color: SlateGray; font-weight: thin;',
     )
@@ -136,7 +139,7 @@ describe('useLog', () => {
       logRerender()
     })
     expect(consoleGroup).toBeCalledWith(
-      `Change in %c<TestComponent /> %c@ ${new Date().toLocaleTimeString()}`,
+      'Change in %c<TestComponent /> %c@ 09:38 PM',
       'color: DodgerBlue',
       'color: SlateGray; font-weight: thin;',
     )
@@ -158,7 +161,7 @@ describe('useLog', () => {
       logUnmount()
     })
     expect(consoleGroup).toBeCalledWith(
-      `Unmount in %c<TestComponent /> %c@ ${new Date().toLocaleTimeString()}`,
+      'Unmount in %c<TestComponent /> %c@ 09:38 PM',
       'color: DodgerBlue',
       'color: SlateGray; font-weight: thin;',
     )
@@ -261,7 +264,7 @@ describe('useLog', () => {
     expect(consoleGroupCollapsed).toHaveBeenCalled()
     // first call, first parameter for group name should exist
     expect(consoleGroupCollapsed.mock.calls[0][0]).toBe(
-      `Mount in %c<TestComponent /> %c@ ${new Date().toLocaleTimeString()}`,
+      'Mount in %c<TestComponent /> %c@ 09:38 PM',
     )
   })
 

@@ -1,6 +1,9 @@
+import * as utils from './utils'
 import { Printer, _PrintConfig, _PrintTypes, _SupportedConsole } from './types'
 
-export function getCurrentDate(): string {
+/* istanbul ignore next */
+export function getCurrentTime(): string {
+  // No need in testing Date module
   return new Date().toLocaleTimeString()
 }
 
@@ -12,9 +15,9 @@ export function getGroupLabel(
     ? `in %c<${String(componentName)} /> `
     : '%c'
   const typeWrapper = `${String(type)} `
-  const dateWrapper = `%c@ ${getCurrentDate()}`
+  const timeWrapper = `%c@ ${utils.getCurrentTime()}`
 
-  return `${typeWrapper}${componentNameWrapper}${dateWrapper}`
+  return `${typeWrapper}${componentNameWrapper}${timeWrapper}`
 }
 
 export function getComponentName(): string {
