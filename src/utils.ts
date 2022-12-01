@@ -1,12 +1,20 @@
 import { Printer, _PrintConfig, _PrintTypes, _SupportedConsole } from './types'
 
+export function getCurrentDate(): string {
+  return new Date().toLocaleTimeString()
+}
+
 export function getGroupLabel(
   type: _PrintTypes,
   componentName?: string,
 ): string {
-  return `${String(type)} ${
-    componentName ? 'in %c<' + String(componentName) + ' /> ' : '%c'
-  }%c@ ${new Date().toLocaleTimeString()}`
+  const componentNameWrapper = componentName
+    ? `in %c<${String(componentName)} /> `
+    : '%c'
+  const typeWrapper = `${String(type)} `
+  const dateWrapper = `%c@ ${getCurrentDate()}`
+
+  return `${typeWrapper}${componentNameWrapper}${dateWrapper}`
 }
 
 export function getComponentName(): string {
@@ -57,20 +65,21 @@ export function print<T>({
   const getCurrentPrinter = (
     method: keyof _SupportedConsole,
   ): _SupportedConsole[keyof _SupportedConsole] => getPrinter(printer, method)
+
   const groupMethod = flags.isCollapsed ? 'groupCollapsed' : 'group'
 
   if (flags.isGrouped) {
     getCurrentPrinter(groupMethod)(group, componentCSS, subValueCSS)
   }
 
-  if (!('prevValue' in arguments[0])) {
-    getCurrentPrinter('log')(`${label.padStart(14, ' ')}: ${String(value)}`)
-  } else {
+  if ('prevValue' in arguments[0]) {
     getCurrentPrinter('log')(
       `Previous value: %c${String(arguments[0].prevValue)}`,
       subValueCSS,
     )
     getCurrentPrinter('log')(` Current value: %c${String(value)}`, changeCSS)
+  } else {
+    getCurrentPrinter('log')(`${label.padStart(14, ' ')}: ${String(value)}`)
   }
 
   if (flags.isGrouped) {
