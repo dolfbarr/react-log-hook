@@ -160,5 +160,20 @@ describe('utils', () => {
       expect(consoleLog).toHaveBeenCalled()
       expect(consoleGroupEnd).toHaveBeenCalled()
     })
+
+    it('prints with custom log level', () => {
+      const consoleWarn = jest
+        .spyOn(console, 'warn')
+        .mockImplementation(() => null)
+      print({
+        ...printProps,
+        logLevel: 'warn',
+      })
+
+      expect(consoleGroup).toHaveBeenCalled()
+      expect(consoleLog).not.toHaveBeenCalled()
+      expect(consoleWarn).toHaveBeenCalled()
+      expect(consoleGroupEnd).toHaveBeenCalled()
+    })
   })
 })

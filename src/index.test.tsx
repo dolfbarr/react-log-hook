@@ -302,4 +302,36 @@ describe('useLog', () => {
 
     expect(anotherPrinterLog).toHaveBeenCalled()
   })
+
+  it('renders hook with custom log level', () => {
+    const consoleWarn = jest
+      .spyOn(console, 'warn')
+      .mockImplementation(() => null)
+
+    renderHook(() => {
+      const { log } = useLog({ logLevel: 'warn' })
+      log('Test')
+    })
+
+    expect(consoleLog).not.toHaveBeenCalled()
+    expect(consoleWarn).toHaveBeenCalled()
+  })
+
+  it('renders hook with custom log level', () => {
+    const consoleWarn = jest
+      .spyOn(console, 'warn')
+      .mockImplementation(() => null)
+    const consoleError = jest
+      .spyOn(console, 'error')
+      .mockImplementation(() => null)
+
+    renderHook(() => {
+      const { log } = useLog({ logLevel: 'error' })
+      log('Test', { logLevel: 'warn' })
+    })
+
+    expect(consoleLog).not.toHaveBeenCalled()
+    expect(consoleError).not.toHaveBeenCalled()
+    expect(consoleWarn).toHaveBeenCalled()
+  })
 })

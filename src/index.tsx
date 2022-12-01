@@ -21,6 +21,7 @@ import {
   CSS_CHANGE,
   CSS_COMPONENT,
   CSS_SUB_VALUE,
+  DEFAULT_LOG_LEVEL,
 } from './constants'
 
 /**
@@ -46,6 +47,7 @@ export function useLog({
   isGroupingEnabled = true,
   isGroupCollapsed = false,
   printer = console as Printer,
+  logLevel = DEFAULT_LOG_LEVEL,
 }: UseLogConfig = {}): UseLogReturn {
   const componentName = getComponentName()
 
@@ -67,7 +69,7 @@ export function useLog({
     const prevValueRef = useRef<T>()
     const printProps: Pick<
       _PrintConfig<T>,
-      'value' | 'styles' | 'componentName' | 'flags' | 'printer'
+      'value' | 'styles' | 'componentName' | 'flags' | 'printer' | 'logLevel'
     > = {
       value: clonedValue,
       styles: {
@@ -81,6 +83,7 @@ export function useLog({
         isCollapsed: props?.isGroupCollapsed ?? isGroupCollapsed,
       },
       printer: props?.printer ?? printer,
+      logLevel: props?.logLevel ?? logLevel,
     }
 
     if (environments.includes(process.env.NODE_ENV ?? 'production')) {

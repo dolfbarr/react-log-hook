@@ -42,6 +42,7 @@ export type UseLogConfig = {
   environments?: string[]
   /** Contains custom implementation of console  */
   printer?: Printer | Console
+  logLevel?: LogLevels
 } & (
   | {
       /** Enable grouping for logs  */
@@ -82,6 +83,7 @@ export interface _PrintConfig<T> {
   componentName: string
   flags?: _PrintFlags
   printer?: Printer | Console
+  logLevel?: LogLevels
 }
 
 /**
@@ -108,20 +110,19 @@ export enum _PrintTypes {
   Change = 'Change',
 }
 
+/** Supported log levels which can be used in the console or custom console implementation */
+export type LogLevels = keyof Pick<
+  Console,
+  'log' | 'info' | 'error' | 'warn' | 'debug'
+>
+
 /**
  * Supported console methods
  * @internal
  */
 export type _SupportedConsole = Pick<
   Console,
-  | 'group'
-  | 'groupCollapsed'
-  | 'groupEnd'
-  | 'log'
-  | 'info'
-  | 'error'
-  | 'warn'
-  | 'debug'
+  'group' | 'groupCollapsed' | 'groupEnd' | LogLevels
 >
 
 /** Describes custom implementation of console object with only supported methods used to render logs */

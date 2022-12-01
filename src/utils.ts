@@ -64,6 +64,7 @@ export function print<T>({
   group = getGroupLabel(type, componentName),
   styles: { componentCSS, subValueCSS, changeCSS } = {},
   printer = {},
+  logLevel = 'log',
 }: _PrintConfig<T>): void {
   const getCurrentPrinter = (
     method: keyof _SupportedConsole,
@@ -76,13 +77,13 @@ export function print<T>({
   }
 
   if ('prevValue' in arguments[0]) {
-    getCurrentPrinter('log')(
+    getCurrentPrinter(logLevel)(
       `Previous value: %c${String(arguments[0].prevValue)}`,
       subValueCSS,
     )
-    getCurrentPrinter('log')(` Current value: %c${String(value)}`, changeCSS)
+    getCurrentPrinter(logLevel)(` Current value: %c${String(value)}`, changeCSS)
   } else {
-    getCurrentPrinter('log')(`${label.padStart(14, ' ')}: ${String(value)}`)
+    getCurrentPrinter(logLevel)(`${label.padStart(14, ' ')}: ${String(value)}`)
   }
 
   if (flags.isGrouped) {
