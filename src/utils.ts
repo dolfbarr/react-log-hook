@@ -61,7 +61,6 @@ export function print<T>({
     isGrouped: true,
   },
   type = _PrintTypes.Change,
-  group = getGroupLabel(type, componentName),
   styles: { componentCSS, subValueCSS, changeCSS } = {},
   printer = {},
   logLevel = 'log',
@@ -73,7 +72,11 @@ export function print<T>({
   const groupMethod = flags.isCollapsed ? 'groupCollapsed' : 'group'
 
   if (flags.isGrouped) {
-    getCurrentPrinter(groupMethod)(group, componentCSS, subValueCSS)
+    getCurrentPrinter(groupMethod)(
+      getGroupLabel(type, componentName),
+      componentCSS,
+      subValueCSS,
+    )
   }
 
   if ('prevValue' in arguments[0]) {
@@ -86,7 +89,5 @@ export function print<T>({
     getCurrentPrinter(logLevel)(`${label.padStart(14, ' ')}: ${String(value)}`)
   }
 
-  if (flags.isGrouped) {
-    getCurrentPrinter('groupEnd')()
-  }
+  if (flags.isGrouped) getCurrentPrinter('groupEnd')()
 }
