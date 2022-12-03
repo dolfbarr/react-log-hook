@@ -34,7 +34,12 @@ export function getMessage<T>(
     ? `${label.padStart(DEFAULT_LABEL_SIZE, ' ')}: `
     : ''.padStart(DEFAULT_LABEL_SIZE + 2, ' ')
 
-  return `${printLabel}${stylePlaceholder(withCss)}${String(value)}`
+  const printValue =
+    typeof value === 'object' && value !== null
+      ? JSON.stringify(value)
+      : String(value)
+
+  return `${printLabel}${stylePlaceholder(withCss)}${printValue}`
 }
 
 export function getGroupLabel(

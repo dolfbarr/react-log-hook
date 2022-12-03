@@ -196,5 +196,31 @@ describe('utils', () => {
         '    Some Label: %cTest Value',
       )
     })
+
+    it('returns message with object', () => {
+      expect(getMessage({ a: 'Test', b: 'Value' }, 'Some Label')).toEqual(
+        '    Some Label: {"a":"Test","b":"Value"}',
+      )
+    })
+
+    it('returns message with array', () => {
+      expect(getMessage(['Test', 'Value'], 'Some Label')).toEqual(
+        '    Some Label: ["Test","Value"]',
+      )
+    })
+
+    it('returns message with array of objects', () => {
+      expect(
+        getMessage(
+          [
+            { a: 'Test', b: 'Value' },
+            { c: 'Test', d: 'Value' },
+          ],
+          'Some Label',
+        ),
+      ).toEqual(
+        '    Some Label: [{"a":"Test","b":"Value"},{"c":"Test","d":"Value"}]',
+      )
+    })
   })
 })
