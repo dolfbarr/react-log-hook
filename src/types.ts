@@ -76,7 +76,7 @@ export interface UseLogReturn {
 export interface _PrintConfig<T> {
   value: T
   prevValue?: T
-  label: string
+  label?: string
   type?: _PrintTypes
   styles?: Styles
   componentName: string

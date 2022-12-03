@@ -175,5 +175,14 @@ describe('utils', () => {
       expect(consoleWarn).toHaveBeenCalled()
       expect(consoleGroupEnd).toHaveBeenCalled()
     })
+
+    it('prints without label', () => {
+      print({
+        ...printProps,
+        label: undefined,
+      })
+
+      expect(consoleLog).toHaveBeenCalledWith('                Test Value')
+    })
   })
 })

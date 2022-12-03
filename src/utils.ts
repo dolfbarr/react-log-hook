@@ -69,10 +69,8 @@ export function print<T>({
     method: keyof _SupportedConsole,
   ): _SupportedConsole[keyof _SupportedConsole] => getPrinter(printer, method)
 
-  const groupMethod = flags.isCollapsed ? 'groupCollapsed' : 'group'
-
   if (flags.isGrouped) {
-    getCurrentPrinter(groupMethod)(
+    getCurrentPrinter(flags.isCollapsed ? 'groupCollapsed' : 'group')(
       getGroupLabel(type, componentName),
       componentCSS,
       subValueCSS,
@@ -86,7 +84,11 @@ export function print<T>({
     )
     getCurrentPrinter(logLevel)(` Current value: %c${String(value)}`, changeCSS)
   } else {
-    getCurrentPrinter(logLevel)(`${label.padStart(14, ' ')}: ${String(value)}`)
+    getCurrentPrinter(logLevel)(
+      `${label ? `${label.padStart(14, ' ')}: ` : ''.padStart(16, ' ')}${String(
+        value,
+      )}`,
+    )
   }
 
   if (flags.isGrouped) getCurrentPrinter('groupEnd')()
