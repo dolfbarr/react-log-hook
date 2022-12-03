@@ -1,6 +1,10 @@
 import * as utils from './utils'
 import { Printer, _PrintConfig, _PrintTypes, _SupportedConsole } from './types'
-import { DEFAULT_LABEL_SIZE } from './constants'
+import {
+  CURRENT_VALUE_LABEL,
+  DEFAULT_LABEL_SIZE,
+  PREVIOUS_VALUE_LABEL,
+} from './constants'
 
 /* istanbul ignore next */
 export function getCurrentTime(): string {
@@ -12,7 +16,11 @@ export function stylePlaceholder(withCss?: boolean): string {
   return withCss ? '%c' : ''
 }
 
-export function getMessageLabel<T>(
+export function getLabel(type: _PrintTypes): string {
+  return `On ${type}`
+}
+
+export function getMessage<T>(
   value: T,
   label?: string,
   withCss?: boolean,
@@ -75,7 +83,6 @@ export function getPrinter(
 
 export function print<T>({
   value,
-  label,
   prevValue,
   componentName,
   flags = {
@@ -110,17 +117,17 @@ export function print<T>({
     css?: string,
   ): void => {
     const printer = getCurrentPrinter(logLevel)
-    const message = getMessageLabel(printValue, label, Boolean(css))
+    const message = getMessage(printValue, label, Boolean(css))
 
     if (!css) printer(message)
     if (css) printer(message, css)
   }
 
   if ('prevValue' in arguments[0]) {
-    printAtLevel('Previous value', arguments[0].prevValue, subValueCSS)
-    printAtLevel('Current value', value, changeCSS)
+    printAtLevel(PREVIOUS_VALUE_LABEL, arguments[0].prevValue, subValueCSS)
+    printAtLevel(CURRENT_VALUE_LABEL, value, changeCSS)
   } else {
-    printAtLevel(label)
+    printAtLevel(getLabel(type))
   }
 
   if (flags.isGrouped) getCurrentPrinter('groupEnd')()

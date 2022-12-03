@@ -98,7 +98,6 @@ export function useLog({
 
         useEffect(function onMount() {
           print({
-            label: 'On mount',
             type: _PrintTypes.Mount,
             ...printProps,
           })
@@ -107,7 +106,6 @@ export function useLog({
 
           return function onUnmount() {
             print({
-              label: 'On unmount',
               type: _PrintTypes.Unmount,
               prevValue: prevValueRef.current,
               ...printProps,
@@ -118,7 +116,6 @@ export function useLog({
         useEffect(
           function onChange() {
             print({
-              label: 'On change',
               type: _PrintTypes.Change,
               prevValue: prevValueRef.current,
               ...printProps,

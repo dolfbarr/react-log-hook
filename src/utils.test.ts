@@ -1,7 +1,7 @@
 import * as utils from './utils'
 import { _PrintConfig, _PrintTypes, Printer } from './types'
 
-const { getGroupLabel, getComponentName, print, getPrinter } = utils
+const { getGroupLabel, getComponentName, print, getPrinter, getMessage } = utils
 
 describe('utils', () => {
   jest.spyOn(utils, 'getCurrentTime').mockReturnValue('09:38 PM')
@@ -59,7 +59,6 @@ describe('utils', () => {
 
     const printProps: _PrintConfig<string> = {
       value: 'Test Value',
-      label: 'A Label',
       componentName: 'SomeComponentName',
     }
 
@@ -71,7 +70,7 @@ describe('utils', () => {
         undefined,
         undefined,
       )
-      expect(consoleLog).toHaveBeenCalledWith('       A Label: Test Value')
+      expect(consoleLog).toHaveBeenCalledWith('     On Change: Test Value')
       expect(consoleLog).toHaveBeenCalledTimes(1)
       expect(consoleGroupEnd).toHaveBeenCalled()
     })
@@ -85,9 +84,9 @@ describe('utils', () => {
         undefined,
       )
       expect(consoleLog).toHaveBeenCalledWith(
-        'Previous value: Some Previous value',
+        'Previous Value: Some Previous value',
       )
-      expect(consoleLog).toHaveBeenCalledWith(' Current value: Test Value')
+      expect(consoleLog).toHaveBeenCalledWith(' Current Value: Test Value')
       expect(consoleLog).toHaveBeenCalledTimes(2)
       expect(consoleGroupEnd).toHaveBeenCalled()
     })
@@ -101,7 +100,7 @@ describe('utils', () => {
       })
 
       expect(consoleGroup).not.toHaveBeenCalled()
-      expect(consoleLog).toHaveBeenCalledWith('       A Label: Test Value')
+      expect(consoleLog).toHaveBeenCalledWith('     On Change: Test Value')
       expect(consoleGroupEnd).not.toHaveBeenCalled()
     })
 
@@ -120,7 +119,7 @@ describe('utils', () => {
         undefined,
         undefined,
       )
-      expect(consoleLog).toHaveBeenCalledWith('       A Label: Test Value')
+      expect(consoleLog).toHaveBeenCalledWith('     On Change: Test Value')
       expect(consoleGroupEnd).toHaveBeenCalled()
     })
 
@@ -173,12 +172,27 @@ describe('utils', () => {
     })
 
     it('prints without label', () => {
-      print({
-        ...printProps,
-        label: undefined,
-      })
+      print(printProps)
 
-      expect(consoleLog).toHaveBeenCalledWith('                Test Value')
+      expect(consoleLog).toHaveBeenCalledWith('     On Change: Test Value')
+    })
+  })
+
+  describe('getMessage', () => {
+    it('returns message', () => {
+      expect(getMessage('Test Value', 'Some Label')).toEqual(
+        '    Some Label: Test Value',
+      )
+    })
+
+    it('returns message without label', () => {
+      expect(getMessage('Test Value')).toEqual('                Test Value')
+    })
+
+    it('returns message with css', () => {
+      expect(getMessage('Test Value', 'Some Label', true)).toEqual(
+        '    Some Label: %cTest Value',
+      )
     })
   })
 })

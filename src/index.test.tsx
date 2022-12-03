@@ -37,13 +37,13 @@ describe('useLog', () => {
     expect(result.current.log).toBeTruthy()
 
     renderHook(() => result.current.log('Test'))
-    expect(consoleLog).toBeCalledWith('      On mount: Test')
+    expect(consoleLog).toBeCalledWith('      On Mount: Test')
     expect(consoleLog).toBeCalledWith(
-      'Previous value: %cTest',
+      'Previous Value: %cTest',
       'color: SlateGray; font-weight: thin;',
     )
     expect(consoleLog).toBeCalledWith(
-      ' Current value: %cTest',
+      ' Current Value: %cTest',
       'color: green; font-weight: bold;',
     )
     expect(consoleLog).toBeCalledTimes(3)
@@ -77,7 +77,7 @@ describe('useLog', () => {
       'color: DodgerBlue',
       'color: SlateGray; font-weight: thin;',
     )
-    expect(consoleLog).toBeCalledWith('      On mount: null')
+    expect(consoleLog).toBeCalledWith('      On Mount: null')
 
     expect(consoleGroup).toBeCalledWith(
       'Change in %c<TestComponent /> %c@ 09:38 PM',
@@ -85,11 +85,11 @@ describe('useLog', () => {
       'color: SlateGray; font-weight: thin;',
     )
     expect(consoleLog).toBeCalledWith(
-      'Previous value: %cnull',
+      'Previous Value: %cnull',
       'color: SlateGray; font-weight: thin;',
     )
     expect(consoleLog).toBeCalledWith(
-      ' Current value: %cnull',
+      ' Current Value: %cnull',
       'color: green; font-weight: bold;',
     )
     expect(consoleGroup).toBeCalledWith(
@@ -98,11 +98,11 @@ describe('useLog', () => {
       'color: SlateGray; font-weight: thin;',
     )
     expect(consoleLog).toBeCalledWith(
-      'Previous value: %cnull',
+      'Previous Value: %cnull',
       'color: SlateGray; font-weight: thin;',
     )
     expect(consoleLog).toBeCalledWith(
-      ' Current value: %cnull',
+      ' Current Value: %cnull',
       'color: green; font-weight: bold;',
     )
     expect(consoleLog).toBeCalledTimes(5)
@@ -121,11 +121,11 @@ describe('useLog', () => {
       'color: SlateGray; font-weight: thin;',
     )
     expect(consoleLog).toBeCalledWith(
-      'Previous value: %cnull',
+      'Previous Value: %cnull',
       'color: SlateGray; font-weight: thin;',
     )
     expect(consoleLog).toBeCalledWith(
-      ' Current value: %conChange 1s',
+      ' Current Value: %conChange 1s',
       'color: green; font-weight: bold;',
     )
     expect(consoleLog).toBeCalledTimes(7)
@@ -144,11 +144,11 @@ describe('useLog', () => {
       'color: SlateGray; font-weight: thin;',
     )
     expect(consoleLog).toBeCalledWith(
-      'Previous value: %conChange 1s',
+      'Previous Value: %conChange 1s',
       'color: SlateGray; font-weight: thin;',
     )
     expect(consoleLog).toBeCalledWith(
-      ' Current value: %conChange 2s',
+      ' Current Value: %conChange 2s',
       'color: green; font-weight: bold;',
     )
     expect(consoleLog).toBeCalledTimes(9)
@@ -166,11 +166,11 @@ describe('useLog', () => {
       'color: SlateGray; font-weight: thin;',
     )
     expect(consoleLog).toBeCalledWith(
-      'Previous value: %conChange 2s',
+      'Previous Value: %conChange 2s',
       'color: SlateGray; font-weight: thin;',
     )
     expect(consoleLog).toBeCalledWith(
-      ' Current value: %cnull',
+      ' Current Value: %cnull',
       'color: green; font-weight: bold;',
     )
     expect(consoleLog).toBeCalledTimes(11)
