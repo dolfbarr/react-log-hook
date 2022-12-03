@@ -317,7 +317,7 @@ describe('useLog', () => {
     expect(consoleWarn).toHaveBeenCalled()
   })
 
-  it('renders hook with custom log level', () => {
+  it('renders log with custom log level', () => {
     const consoleWarn = jest
       .spyOn(console, 'warn')
       .mockImplementation(() => null)
@@ -333,5 +333,15 @@ describe('useLog', () => {
     expect(consoleLog).not.toHaveBeenCalled()
     expect(consoleError).not.toHaveBeenCalled()
     expect(consoleWarn).toHaveBeenCalled()
+  })
+
+  it('renders log with custom group name', () => {
+    renderHook(() => {
+      const { log } = useLog()
+      log('Test', { groupLabelRenderer: (type, name) => `${type} ${name}` })
+    })
+
+    // first call, first parameter (group label) should be modified
+    expect(consoleGroup.mock.calls[0][0]).toBe('Mount TestComponent')
   })
 })

@@ -28,6 +28,10 @@ export function ExampleComponent(): React.ReactElement {
   log(state)
   log(anotherState, { styles: { componentCSS: 'color: darkRed;' } })
 
+  log(anotherState, {
+    groupLabelRenderer: (type, name) => `Such a group! ${type} & ${name}`,
+  })
+
   useEffect(function setStateMount() {
     setState('onMount')
     setAnotherState('onMount')

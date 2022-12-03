@@ -103,6 +103,7 @@ export function print<T>({
   styles: { componentCSS, subValueCSS, changeCSS } = {},
   printer = {},
   logLevel = 'log',
+  groupLabelRenderer,
 }: _PrintConfig<T>): void {
   const getCurrentPrinter = (
     method: keyof _SupportedConsole,
@@ -110,12 +111,14 @@ export function print<T>({
 
   if (flags.isGrouped) {
     getCurrentPrinter(flags.isCollapsed ? 'groupCollapsed' : 'group')(
-      getGroupLabel(
-        type,
-        componentName,
-        Boolean(componentCSS),
-        Boolean(subValueCSS),
-      ),
+      groupLabelRenderer
+        ? groupLabelRenderer(type, componentName)
+        : getGroupLabel(
+            type,
+            componentName,
+            Boolean(componentCSS),
+            Boolean(subValueCSS),
+          ),
       componentCSS,
       subValueCSS,
     )

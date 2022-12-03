@@ -34,7 +34,6 @@ export interface Styles {
   subValueCSS?: string
 }
 
-/** Describes configuration object at component level */
 export type UseLogConfig = {
   /** Contains styles object with different CSS inline styles used in logging */
   styles?: Styles
@@ -49,19 +48,24 @@ export type UseLogConfig = {
       isGroupingEnabled?: boolean
       /** Render groups collapsed  */
       isGroupCollapsed?: boolean
+      /** A function which will be used to render labels for the group  */
+      groupLabelRenderer?: (
+        /** Current stage of component lifecycle  */
+        type: ComponentLifecycleLabels,
+        componentName: string,
+      ) => string
     }
   | {
-      /** Enable grouping for logs  */
+      /** Disable grouping for logs  */
       isGroupingEnabled?: false
-      /** Render groups collapsed  */
       isGroupCollapsed?: never
+      groupLabelRenderer?: never
     }
 )
 
 /** Describes configuration object at call level, can be used to override configuration */
 export type LogConfig = UseLogConfig
 
-/** Return value of `useLog` hook */
 export interface UseLogReturn {
   /** Used for logging per component lifecycle */
   log: <T>(value: T, props?: LogConfig) => void
@@ -82,6 +86,10 @@ export interface _PrintConfig<T> {
   flags?: _PrintFlags
   printer?: Printer | Console
   logLevel?: LogLevels
+  groupLabelRenderer?: (
+    type: ComponentLifecycleLabels,
+    componentName: string,
+  ) => string
 }
 
 /**
@@ -97,10 +105,6 @@ export type _PrintFlags =
       isGrouped?: false
       isCollapsed?: never
     }
-
-/**
- * Label types of component lifecycle stages
- */
 export enum ComponentLifecycleLabels {
   Mount = 'Mount',
   Unmount = 'Unmount',

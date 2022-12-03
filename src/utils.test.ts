@@ -178,6 +178,19 @@ describe('utils', () => {
 
       expect(consoleLog).toHaveBeenCalledWith('     On Change: Test Value')
     })
+
+    it('prints with custom group label', () => {
+      print({
+        ...printProps,
+        groupLabelRenderer: (type, name) => `${type} ${name}`,
+      })
+
+      expect(consoleGroup).toHaveBeenCalledWith(
+        'Change SomeComponentName',
+        undefined,
+        undefined,
+      )
+    })
   })
 
   describe('getMessage', () => {
