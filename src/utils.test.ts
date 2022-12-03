@@ -7,12 +7,12 @@ describe('utils', () => {
   jest.spyOn(utils, 'getCurrentTime').mockReturnValue('09:38 PM')
   describe('getGroupLabel', () => {
     it('renders', () => {
-      expect(getGroupLabel(_PrintTypes.Change)).toEqual('Change %c%c@ 09:38 PM')
+      expect(getGroupLabel(_PrintTypes.Change)).toEqual('Change @ 09:38 PM')
     })
 
     it('renders with component name', () => {
       expect(getGroupLabel(_PrintTypes.Mount, 'TestComponent')).toEqual(
-        'Mount in %c<TestComponent /> %c@ 09:38 PM',
+        'Mount in <TestComponent /> @ 09:38 PM',
       )
     })
   })
@@ -67,7 +67,7 @@ describe('utils', () => {
       print(printProps)
 
       expect(consoleGroup).toHaveBeenCalledWith(
-        'Change in %c<SomeComponentName /> %c@ 09:38 PM',
+        'Change in <SomeComponentName /> @ 09:38 PM',
         undefined,
         undefined,
       )
@@ -80,7 +80,7 @@ describe('utils', () => {
       print({ ...printProps, prevValue: 'Some Previous value' })
 
       expect(consoleGroup).toHaveBeenCalledWith(
-        'Change in %c<SomeComponentName /> %c@ 09:38 PM',
+        'Change in <SomeComponentName /> @ 09:38 PM',
         undefined,
         undefined,
       )
@@ -116,7 +116,7 @@ describe('utils', () => {
 
       expect(consoleGroup).not.toHaveBeenCalled()
       expect(consoleGroupCollapsed).toHaveBeenCalledWith(
-        'Change in %c<SomeComponentName /> %c@ 09:38 PM',
+        'Change in <SomeComponentName /> @ 09:38 PM',
         undefined,
         undefined,
       )

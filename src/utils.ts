@@ -1,5 +1,6 @@
 import * as utils from './utils'
 import { Printer, _PrintConfig, _PrintTypes, _SupportedConsole } from './types'
+import { DEFAULT_LABEL_SIZE } from './constants'
 
 /* istanbul ignore next */
 export function getCurrentTime(): string {
@@ -7,15 +8,36 @@ export function getCurrentTime(): string {
   return new Date().toLocaleTimeString()
 }
 
+export function stylePlaceholder(withCss?: boolean): string {
+  return withCss ? '%c' : ''
+}
+
+export function getMessageLabel<T>(
+  value: T,
+  label?: string,
+  withCss?: boolean,
+): string {
+  const printLabel = label
+    ? `${label.padStart(DEFAULT_LABEL_SIZE, ' ')}: `
+    : ''.padStart(DEFAULT_LABEL_SIZE + 2, ' ')
+
+  return `${printLabel}${stylePlaceholder(withCss)}${String(value)}`
+}
+
 export function getGroupLabel(
   type: _PrintTypes,
   componentName?: string,
+  withComponentCSS?: boolean,
+  withSubValueCSS?: boolean,
 ): string {
+  const componentCssPlaceholder = stylePlaceholder(withComponentCSS)
+  const subValueCssPlaceholder = stylePlaceholder(withComponentCSS)
+
   const componentNameWrapper = componentName
-    ? `in %c<${String(componentName)} /> `
-    : '%c'
+    ? `in ${componentCssPlaceholder}<${String(componentName)} /> `
+    : `${componentCssPlaceholder}`
   const typeWrapper = `${String(type)} `
-  const timeWrapper = `%c@ ${utils.getCurrentTime()}`
+  const timeWrapper = `${subValueCssPlaceholder}@ ${utils.getCurrentTime()}`
 
   return `${typeWrapper}${componentNameWrapper}${timeWrapper}`
 }
@@ -71,7 +93,12 @@ export function print<T>({
 
   if (flags.isGrouped) {
     getCurrentPrinter(flags.isCollapsed ? 'groupCollapsed' : 'group')(
-      getGroupLabel(type, componentName),
+      getGroupLabel(
+        type,
+        componentName,
+        Boolean(componentCSS),
+        Boolean(subValueCSS),
+      ),
       componentCSS,
       subValueCSS,
     )
@@ -83,9 +110,7 @@ export function print<T>({
     css?: string,
   ): void => {
     const printer = getCurrentPrinter(logLevel)
-    const message = `${
-      label ? `${label.padStart(14, ' ')}: ` : ''.padStart(16, ' ')
-    }${css ? '%c' : ''}${String(printValue)}`
+    const message = getMessageLabel(printValue, label, Boolean(css))
 
     if (!css) printer(message)
     if (css) printer(message, css)

@@ -7,3 +7,5 @@ export const CSS_SUB_VALUE = 'color: SlateGray; font-weight: thin;'
 export const ALLOWED_NODE_ENVS = ['dev', 'development']
 
 export const DEFAULT_LOG_LEVEL: LogLevels = 'log'
+
+export const DEFAULT_LABEL_SIZE = 14
