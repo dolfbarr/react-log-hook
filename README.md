@@ -42,13 +42,13 @@ React hook for logging per component lifecycle
 With npm
 
 ```sh
-npm install react-log-hook
+npm install -D react-log-hook
 ```
 
 With yarn
 
 ```sh
-yarn add react-log-hook
+yarn add -D react-log-hook
 ```
 
 ## Usage
