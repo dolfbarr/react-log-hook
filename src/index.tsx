@@ -11,7 +11,7 @@ import {
   UseLogConfig,
   UseLogReturn,
   LogConfig,
-  _PrintTypes,
+  ComponentLifecycleLabels,
   _PrintConfig,
   Printer,
 } from './types'
@@ -98,7 +98,7 @@ export function useLog({
 
         useEffect(function onMount() {
           print({
-            type: _PrintTypes.Mount,
+            type: ComponentLifecycleLabels.Mount,
             ...printProps,
           })
 
@@ -106,7 +106,7 @@ export function useLog({
 
           return function onUnmount() {
             print({
-              type: _PrintTypes.Unmount,
+              type: ComponentLifecycleLabels.Unmount,
               prevValue: prevValueRef.current,
               ...printProps,
             })
@@ -116,7 +116,7 @@ export function useLog({
         useEffect(
           function onChange() {
             print({
-              type: _PrintTypes.Change,
+              type: ComponentLifecycleLabels.Change,
               prevValue: prevValueRef.current,
               ...printProps,
             })

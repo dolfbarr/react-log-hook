@@ -1,5 +1,5 @@
 import * as utils from './utils'
-import { _PrintConfig, _PrintTypes, Printer } from './types'
+import { _PrintConfig, ComponentLifecycleLabels, Printer } from './types'
 
 const { getGroupLabel, getComponentName, print, getPrinter, getMessage } = utils
 
@@ -7,13 +7,15 @@ describe('utils', () => {
   jest.spyOn(utils, 'getCurrentTime').mockReturnValue('09:38 PM')
   describe('getGroupLabel', () => {
     it('renders', () => {
-      expect(getGroupLabel(_PrintTypes.Change)).toEqual('Change @ 09:38 PM')
+      expect(getGroupLabel(ComponentLifecycleLabels.Change)).toEqual(
+        'Change @ 09:38 PM',
+      )
     })
 
     it('renders with component name', () => {
-      expect(getGroupLabel(_PrintTypes.Mount, 'TestComponent')).toEqual(
-        'Mount in <TestComponent /> @ 09:38 PM',
-      )
+      expect(
+        getGroupLabel(ComponentLifecycleLabels.Mount, 'TestComponent'),
+      ).toEqual('Mount in <TestComponent /> @ 09:38 PM')
     })
   })
 

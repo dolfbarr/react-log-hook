@@ -76,7 +76,7 @@ export interface UseLogReturn {
 export interface _PrintConfig<T> {
   value: T
   prevValue?: T
-  type?: _PrintTypes
+  type?: ComponentLifecycleLabels
   styles?: Styles
   componentName: string
   flags?: _PrintFlags
@@ -99,9 +99,9 @@ export type _PrintFlags =
     }
 
 /**
- * Label types of print groups
+ * Label types of component lifecycle stages
  */
-export enum _PrintTypes {
+export enum ComponentLifecycleLabels {
   Mount = 'Mount',
   Unmount = 'Unmount',
   Change = 'Change',

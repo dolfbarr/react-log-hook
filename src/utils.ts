@@ -1,5 +1,10 @@
 import * as utils from './utils'
-import { Printer, _PrintConfig, _PrintTypes, _SupportedConsole } from './types'
+import {
+  Printer,
+  _PrintConfig,
+  ComponentLifecycleLabels,
+  _SupportedConsole,
+} from './types'
 import {
   CURRENT_VALUE_LABEL,
   DEFAULT_LABEL_SIZE,
@@ -16,7 +21,7 @@ export function stylePlaceholder(withCss?: boolean): string {
   return withCss ? '%c' : ''
 }
 
-export function getLabel(type: _PrintTypes): string {
+export function getLabel(type: ComponentLifecycleLabels): string {
   return `On ${type}`
 }
 
@@ -33,7 +38,7 @@ export function getMessage<T>(
 }
 
 export function getGroupLabel(
-  type: _PrintTypes,
+  type: ComponentLifecycleLabels,
   componentName?: string,
   withComponentCSS?: boolean,
   withSubValueCSS?: boolean,
@@ -89,7 +94,7 @@ export function print<T>({
     isCollapsed: false,
     isGrouped: true,
   },
-  type = _PrintTypes.Change,
+  type = ComponentLifecycleLabels.Change,
   styles: { componentCSS, subValueCSS, changeCSS } = {},
   printer = {},
   logLevel = 'log',
