@@ -85,13 +85,9 @@ describe('utils', () => {
         undefined,
       )
       expect(consoleLog).toHaveBeenCalledWith(
-        'Previous value: %cSome Previous value',
-        undefined,
+        'Previous value: Some Previous value',
       )
-      expect(consoleLog).toHaveBeenCalledWith(
-        ' Current value: %cTest Value',
-        undefined,
-      )
+      expect(consoleLog).toHaveBeenCalledWith(' Current value: Test Value')
       expect(consoleLog).toHaveBeenCalledTimes(2)
       expect(consoleGroupEnd).toHaveBeenCalled()
     })

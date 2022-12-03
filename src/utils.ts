@@ -77,18 +77,25 @@ export function print<T>({
     )
   }
 
+  const printAtLevel = (
+    label?: string,
+    printValue: T = value,
+    css?: string,
+  ): void => {
+    const printer = getCurrentPrinter(logLevel)
+    const message = `${
+      label ? `${label.padStart(14, ' ')}: ` : ''.padStart(16, ' ')
+    }${css ? '%c' : ''}${String(printValue)}`
+
+    if (!css) printer(message)
+    if (css) printer(message, css)
+  }
+
   if ('prevValue' in arguments[0]) {
-    getCurrentPrinter(logLevel)(
-      `Previous value: %c${String(arguments[0].prevValue)}`,
-      subValueCSS,
-    )
-    getCurrentPrinter(logLevel)(` Current value: %c${String(value)}`, changeCSS)
+    printAtLevel('Previous value', arguments[0].prevValue, subValueCSS)
+    printAtLevel('Current value', value, changeCSS)
   } else {
-    getCurrentPrinter(logLevel)(
-      `${label ? `${label.padStart(14, ' ')}: ` : ''.padStart(16, ' ')}${String(
-        value,
-      )}`,
-    )
+    printAtLevel(label)
   }
 
   if (flags.isGrouped) getCurrentPrinter('groupEnd')()
