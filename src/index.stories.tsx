@@ -21,35 +21,28 @@ export function App(): React.ReactElement {
 }
 
 export function ExampleComponent(): React.ReactElement {
-  const { log } = useLog({ styles: { componentCSS: 'color: darkBlue;' } })
-  const [state, setState] = useState<string | null>(null)
-  const [anotherState, setAnotherState] = useState<string | null>(null)
+  const { log } = useLog()
+  const [currentState, setCurrentState] = useState<object>({})
 
-  log(state)
-  log(anotherState, { styles: { componentCSS: 'color: darkRed;' } })
-
-  log(anotherState, {
-    groupLabelRenderer: (type, name) => `Such a group! ${type} & ${name}`,
-  })
+  log(currentState)
 
   useEffect(function setStateMount() {
-    setState('onMount')
-    setAnotherState('onMount')
+    setCurrentState({ a: 'Test', b: 'Value', state: 'OnMount' })
 
     setTimeout(function setStateChange1() {
-      setState('onChange 1s')
+      setCurrentState({ a: 'Test', b: 'Value', state: 'onChange 1s' })
     }, 1000)
 
     setTimeout(function setStateChange2() {
-      setState('onChange 2s')
+      setCurrentState({ a: 'Test', b: 'Value', state: 'onChange 2s' })
     }, 2000)
 
     return function setStateUnmount() {
-      setState('onUnmount')
+      setCurrentState({ a: 'Test', b: 'Value', state: 'onUnmount' })
     }
   }, [])
 
-  return <p>Test Component: {state}</p>
+  return <p>Test Component: {JSON.stringify(currentState)}</p>
 }
 
 const DefaultMeta: ComponentMeta<typeof App> = {
