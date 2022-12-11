@@ -91,7 +91,7 @@ const App = () => {
 - [x] Add dev environment support by default
 - [x] Polish the looks with component names, function calls, time etc
 - [ ] Add more customization options
-- [ ] Support SSR & Server components
+- [ ] Test with SSR & Server components
 
 ## Contributing
 
