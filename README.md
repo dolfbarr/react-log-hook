@@ -27,7 +27,7 @@
 React hook for logging per component lifecycle
 
 ## Features
-- 🪶 **Lightweight** — under *1.5Kb* gzipped
+- 🪶 **Lightweight** — under *2 kB* gzipped
 - 🗂️ **Typed** — made with TypeScript, ships with types
 - 🥰 **Simple** — don't worry about any changes in your props & state
 - 🔧 **Customizable** — work in progress 😉
