@@ -236,4 +236,25 @@ describe('utils', () => {
       )
     })
   })
+
+  describe('getRenderFunctionProps', () => {
+    const printProps: _PrintConfig<string> = {
+      value: 'Test Value',
+      componentName: 'SomeComponentName',
+      printer: console,
+      logLevel: 'warn',
+    }
+
+    it('returns print props', () => {
+      expect(utils.getRenderFunctionProps(printProps, false)).toHaveProperty(
+        'logLevel',
+      )
+    })
+
+    it('returns print props', () => {
+      expect(utils.getRenderFunctionProps(printProps, true)).not.toHaveProperty(
+        'logLevel',
+      )
+    })
+  })
 })

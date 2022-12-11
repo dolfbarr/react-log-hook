@@ -344,4 +344,28 @@ describe('useLog', () => {
     // first call, first parameter (group label) should be modified
     expect(consoleGroup.mock.calls[0][0]).toBe('Mount TestComponent')
   })
+
+  it('renders log with custom print function', () => {
+    const render = jest.fn()
+    const anotherRender = jest.fn()
+    const printerSpy = jest.spyOn(utils, 'print')
+
+    renderHook(() => {
+      const { log } = useLog({ render })
+      log('Test', { render: anotherRender })
+    })
+
+    expect(render).not.toHaveBeenCalled()
+    expect(printerSpy).not.toHaveBeenCalled()
+    expect(anotherRender).toHaveBeenCalledWith({
+      componentName: 'TestComponent',
+      flags: {
+        isCollapsed: false,
+        isGrouped: true,
+      },
+      prevValue: undefined,
+      type: 'Mount',
+      value: 'Test',
+    })
+  })
 })

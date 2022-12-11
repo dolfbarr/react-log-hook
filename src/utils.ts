@@ -4,6 +4,7 @@ import {
   _PrintConfig,
   ComponentLifecycleLabels,
   _SupportedConsole,
+  RenderProps,
 } from './types'
 import {
   CURRENT_VALUE_LABEL,
@@ -79,6 +80,28 @@ export function getComponentName(): string {
     /* istanbul ignore next */
     return '' // will be never reached since getComponentName always throws an instance of Error to parse the stack
   }
+}
+
+export function getRenderFunctionProps<T>(
+  props: _PrintConfig<T>,
+  isRender?: boolean,
+): _PrintConfig<T> | RenderProps<T> {
+  if (isRender) {
+    const renderProps: RenderProps<T> = {
+      value: props.value,
+      prevValue: props.prevValue,
+      type: props.type,
+      componentName: props.componentName,
+      flags: {
+        isGrouped: props.flags?.isGrouped,
+        isCollapsed: props.flags?.isCollapsed,
+      },
+    }
+
+    return renderProps
+  }
+
+  return props
 }
 
 export function getPrinter(

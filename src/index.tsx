@@ -15,7 +15,7 @@ import {
   _PrintConfig,
   Printer,
 } from './types'
-import { getComponentName, print } from './utils'
+import { getComponentName, getRenderFunctionProps, print } from './utils'
 import {
   ALLOWED_NODE_ENVS,
   CSS_CHANGE,
@@ -49,6 +49,7 @@ export function useLog({
   printer = console as Printer,
   logLevel = DEFAULT_LOG_LEVEL,
   groupLabelRenderer,
+  render,
 }: UseLogConfig = {}): UseLogReturn {
   const componentName = getComponentName()
 
@@ -98,6 +99,14 @@ export function useLog({
       function logHooks(): void {
         const isUnmounting = useRef(false)
 
+        const printFunc = (printProps: _PrintConfig<T>): void =>
+          (props?.render ?? render ?? print)(
+            getRenderFunctionProps(
+              printProps,
+              Boolean(props?.render ?? render),
+            ),
+          )
+
         useEffect(function setIsUnmounting() {
           return function setIsUnmountingOnMount() {
             isUnmounting.current = true
@@ -105,7 +114,7 @@ export function useLog({
         }, [])
 
         useEffect(function onMount() {
-          print({
+          printFunc({
             type: ComponentLifecycleLabels.Mount,
             ...printProps,
           })
@@ -113,7 +122,7 @@ export function useLog({
           prevValueRef.current = value
 
           return function onUnmount() {
-            print({
+            printFunc({
               type: ComponentLifecycleLabels.Unmount,
               prevValue: prevValueRef.current,
               ...printProps,
@@ -123,7 +132,7 @@ export function useLog({
 
         useEffect(
           function onChange() {
-            print({
+            printFunc({
               type: ComponentLifecycleLabels.Change,
               prevValue: prevValueRef.current,
               ...printProps,
