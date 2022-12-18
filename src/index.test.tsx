@@ -363,6 +363,7 @@ describe('useLog', () => {
         isCollapsed: false,
         isGrouped: true,
       },
+      inline: true,
       prevValue: undefined,
       type: 'Mount',
       value: 'Test',

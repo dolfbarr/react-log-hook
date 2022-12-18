@@ -96,6 +96,7 @@ export function getRenderFunctionProps<T>(
       prevValue: props.prevValue,
       type: props.type,
       componentName: props.componentName,
+      inline: props.inline,
       flags: {
         isGrouped: props.flags?.isGrouped,
         isCollapsed: props.flags?.isCollapsed,

@@ -42,10 +42,10 @@ export type UseLogConfig = {
   /** Contains custom implementation of console  */
   printer?: Printer | Console
   logLevel?: LogLevels
-  /** Custom function which will be used for rendering the result, provided with useful data */
-  render?: <T>(props: RenderProps<T>) => void
   /** Render object or array inline or via interactive browser renderer */
   inline?: boolean
+  /** Custom function which will be used for rendering the result, provided with useful data */
+  render?: <T>(props: RenderProps<T>) => void
 } & (
   | {
       /** Enable grouping for logs  */
@@ -78,7 +78,7 @@ export interface UseLogReturn {
 /** Describes input parameters for custom printer function */
 export type RenderProps<T> = Pick<
   _PrintConfig<T>,
-  'value' | 'prevValue' | 'type' | 'componentName'
+  'value' | 'prevValue' | 'type' | 'componentName' | 'inline'
 > & {
   flags?: Pick<_PrintFlags, 'isGrouped' | 'isCollapsed'>
 }
