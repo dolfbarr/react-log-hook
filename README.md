@@ -27,11 +27,11 @@
 React hook for logging per component lifecycle
 
 ## Features
-- 🪶 **Lightweight** — under *2 kB* gzipped
-- 🗂️ **Typed** — made with TypeScript, ships with types
+- 🪶 **Lightweight** — under *1.5 kB* gzipped & minified
+- 🗂️ **Typed** — made with TypeScript, shipped with types
 - 🥰 **Simple** — don't worry about any changes in your props & state
-- 🔧 **Customizable** — work in progress 😉
-- 🔬 **Tested** — up to 100% coverage
+- 🔧 **Customizable** — able to change everything you see in the logs
+- 🔬 **Tested** — 💯% test coverage
 - 🏎️ **Fast** — native react hooks & optimized
 - 📭 **No dependecies**
 
@@ -53,6 +53,8 @@ yarn add -D react-log-hook
 
 ## Usage
 
+### Basic usage
+
 ```javascript
 import {useLog} from 'react-log-hook'
 
@@ -64,6 +66,74 @@ const App = () => {
 
   // Log the changes via console in real time!
   log(state)
+
+  return null
+}
+```
+
+### Configuration options
+
+```javascript
+import {useLog} from 'react-log-hook'
+
+const App = () => {
+  // Any configuration properties are optional
+  const { log } = useLog({
+    environments: [
+      /** Contains array of environments of `process.env.NODE_ENV` in which logging will be allowed  */
+      'dev',
+      'development',
+    ],
+
+    // Print Options
+
+    styles: {
+      /** Contains styles object with different CSS inline styles used in logging */
+
+      componentCSS:
+        'color: DodgerBlue' /** Inline css for rendering component name in the logs */,
+      changeCSS:
+        'color: green; font-weight: bold;' /** Inline css for rendering current value in the logs */,
+      subValueCSS:
+        'color: SlateGray; font-weight: thin;' /** Inline css for rendering any additional data like time or previous value in the logs */,
+    },
+    printer: console /** Contains custom implementation of console */,
+    logLevel: 'log' /** Level of logging defined by console method */,
+    /** Render object or array inline or via interactive browser renderer */
+    inline: true,
+    isGroupingEnabled: true /** Enable grouping for logs  */,
+    isGroupCollapsed: false /** Render groups collapsed  */,
+    groupLabelRenderer: (
+      /** A function which will be used to render labels for the group  */
+      type /** Current stage of component lifecycle: 'Mount' | 'Change' | 'Unmount'  */,
+      componentName,
+    ) => `${type}${componentName}`,
+
+    // Custom Render Function
+
+    render: function ({
+      /** Custom function which will be used for rendering the result, provided with useful data */
+      value,
+      prevValue,
+      type /** Current stage of component lifecycle: 'Mount' | 'Change' | 'Unmount' */,
+      componentName,
+      inline /** Render object or array inline or via interactive browser renderer */,
+      flags: {
+        isGrouped /** Enable grouping for logs  */,
+        isCollapsed /** Render groups collapsed  */,
+      },
+    }): void {
+      console.log(value)
+    },
+  })
+
+  const [state, setState] = useState(null)
+
+  // It's possible to redefine any configuration option per log call!
+  log(state, {
+    inline: false,
+    logLevel: 'warn'
+  })
 
   return null
 }
