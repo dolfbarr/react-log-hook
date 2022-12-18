@@ -368,4 +368,14 @@ describe('useLog', () => {
       value: 'Test',
     })
   })
+
+  it('renders log without inline rendering', () => {
+    const consoleDir = jest.spyOn(console, 'dir').mockImplementation(() => null)
+    renderHook(() => {
+      const { log } = useLog({ inline: false })
+      log({ test: 'value' }, { inline: false })
+    })
+
+    expect(consoleDir).toHaveBeenCalled()
+  })
 })

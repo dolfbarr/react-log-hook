@@ -44,6 +44,8 @@ export type UseLogConfig = {
   logLevel?: LogLevels
   /** Custom function which will be used for rendering the result, provided with useful data */
   render?: <T>(props: RenderProps<T>) => void
+  /** Render object or array inline or via interactive browser renderer */
+  inline?: boolean
 } & (
   | {
       /** Enable grouping for logs  */
@@ -96,6 +98,7 @@ export interface _PrintConfig<T> {
   flags?: _PrintFlags
   printer?: Printer | Console
   logLevel?: LogLevels
+  inline?: boolean
   groupLabelRenderer?: (
     type: ComponentLifecycleLabels,
     componentName: string,
@@ -133,7 +136,7 @@ export type LogLevels = keyof Pick<
  */
 export type _SupportedConsole = Pick<
   Console,
-  'group' | 'groupCollapsed' | 'groupEnd' | LogLevels
+  'group' | 'groupCollapsed' | 'groupEnd' | 'dir' | LogLevels
 >
 
 /** Describes custom implementation of console object with only supported methods used to render logs */

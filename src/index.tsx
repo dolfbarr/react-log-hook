@@ -50,6 +50,7 @@ export function useLog({
   logLevel = DEFAULT_LOG_LEVEL,
   groupLabelRenderer,
   render,
+  inline = true,
 }: UseLogConfig = {}): UseLogReturn {
   const componentName = getComponentName()
 
@@ -78,6 +79,7 @@ export function useLog({
       | 'printer'
       | 'logLevel'
       | 'groupLabelRenderer'
+      | 'inline'
     > = {
       value: clonedValue,
       styles: {
@@ -93,6 +95,7 @@ export function useLog({
       printer: props?.printer ?? printer,
       logLevel: props?.logLevel ?? logLevel,
       groupLabelRenderer: props?.groupLabelRenderer ?? groupLabelRenderer,
+      inline: props?.inline ?? inline,
     }
 
     if (environments.includes(process.env.NODE_ENV ?? 'production')) {

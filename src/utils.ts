@@ -12,6 +12,10 @@ import {
   PREVIOUS_VALUE_LABEL,
 } from './constants'
 
+export function isObjectOrArray<T>(value: T): boolean {
+  return Array.isArray(value) || (typeof value === 'object' && value !== null)
+}
+
 /* istanbul ignore next */
 export function getCurrentTime(): string {
   // No need in testing Date module
@@ -30,17 +34,17 @@ export function getMessage<T>(
   value: T,
   label?: string,
   withCss?: boolean,
+  inline = true,
 ): string {
   const printLabel = label
     ? `${label.padStart(DEFAULT_LABEL_SIZE, ' ')}: `
     : ''.padStart(DEFAULT_LABEL_SIZE + 2, ' ')
 
-  const printValue =
-    typeof value === 'object' && value !== null
-      ? JSON.stringify(value)
-      : String(value)
+  const printValue = isObjectOrArray(value)
+    ? JSON.stringify(value)
+    : String(value)
 
-  return `${printLabel}${stylePlaceholder(withCss)}${printValue}`
+  return `${printLabel}${stylePlaceholder(withCss)}${inline ? printValue : ''}`
 }
 
 export function getGroupLabel(
@@ -127,6 +131,7 @@ export function print<T>({
   printer = {},
   logLevel = 'log',
   groupLabelRenderer,
+  inline = true,
 }: _PrintConfig<T>): void {
   const getCurrentPrinter = (
     method: keyof _SupportedConsole,
@@ -147,23 +152,34 @@ export function print<T>({
     )
   }
 
-  const printAtLevel = (
-    label?: string,
-    printValue: T = value,
-    css?: string,
-  ): void => {
+  const printAtLevel = (printValue: T, label?: string, css?: string): void => {
     const printer = getCurrentPrinter(logLevel)
-    const message = getMessage(printValue, label, Boolean(css))
+    const message = getMessage(printValue, label, Boolean(css), inline)
 
     if (!css) printer(message)
     if (css) printer(message, css)
   }
 
+  const printArDirLevel = (printValue: T): void => {
+    const printer = getCurrentPrinter('dir')
+    printer(printValue)
+  }
+
   if ('prevValue' in arguments[0]) {
-    printAtLevel(PREVIOUS_VALUE_LABEL, arguments[0].prevValue, subValueCSS)
-    printAtLevel(CURRENT_VALUE_LABEL, value, changeCSS)
+    printAtLevel(arguments[0].prevValue, PREVIOUS_VALUE_LABEL, subValueCSS)
+    if (!inline) {
+      printArDirLevel(arguments[0].prevValue)
+    }
+
+    printAtLevel(value, CURRENT_VALUE_LABEL, changeCSS)
+    if (!inline) {
+      printArDirLevel(value)
+    }
   } else {
-    printAtLevel(getLabel(type))
+    printAtLevel(value, getLabel(type))
+    if (!inline) {
+      printArDirLevel(value)
+    }
   }
 
   if (flags.isGrouped) getCurrentPrinter('groupEnd')()
