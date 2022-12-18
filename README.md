@@ -89,7 +89,6 @@ const App = () => {
 
     styles: {
       /** Contains styles object with different CSS inline styles used in logging */
-
       componentCSS:
         'color: DodgerBlue' /** Inline css for rendering component name in the logs */,
       changeCSS:
