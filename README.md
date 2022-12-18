@@ -90,7 +90,7 @@ const App = () => {
 - [x] Use console groups to handle all the logs
 - [x] Add dev environment support by default
 - [x] Polish the looks with component names, function calls, time etc
-- [ ] Add more customization options
+- [x] Add more customization options
 - [ ] Test with SSR & Server components
 
 ## Contributing
