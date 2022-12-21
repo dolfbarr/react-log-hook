@@ -23,6 +23,12 @@ describe('utils', () => {
     it('gets component name', () => {
       expect(getComponentName()).toEqual('_callCircusTest')
     })
+
+    it('returns empty string if error.stack is not supported', () => {
+      const customError = new Error('error without stack')
+      delete customError.stack
+      expect(getComponentName(customError)).toEqual('')
+    })
   })
 
   describe('getPrinter', () => {
