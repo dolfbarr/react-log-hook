@@ -31,7 +31,7 @@ React hook for logging per component lifecycle
 - 🗂️ **Typed** — made with TypeScript, shipped with types
 - 🥰 **Simple** — don't worry about any changes in your props & state
 - 🔧 **Customizable** — able to change everything you see in the logs
-- 🔬 **Tested** — 💯% test coverage
+- 🔬 **Tested** — up to 💯% unit test coverage
 - 🏎️ **Fast** — native react hooks & optimized
 - 📭 **No dependecies**
 
