@@ -24,9 +24,16 @@ describe('utils', () => {
       expect(getComponentName()).toEqual('_callCircusTest')
     })
 
-    it('returns empty string if error.stack is not supported', () => {
+    it('returns empty string if error.stack is not supported by the browser', () => {
       const customError = new Error('error without stack')
       delete customError.stack
+      expect(getComponentName(customError)).toEqual('')
+    })
+
+    it('returns empty string if error.stack has different format', () => {
+      const customError = new Error('error with unsupported stack')
+      customError.stack =
+        'This is custom implementation of stack: calledThis > calledThat'
       expect(getComponentName(customError)).toEqual('')
     })
   })

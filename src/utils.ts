@@ -78,9 +78,9 @@ export function getComponentName(
 
   re.exec(error.stack)
   re.exec(error.stack)
-  const m = re.exec(error.stack) ?? []
+  const m = re.exec(error.stack)
 
-  return String(m[1] || m[2])
+  return m ? String(m[1] || m[2]) : ''
 }
 
 export function getRenderFunctionProps<T>(
