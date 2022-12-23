@@ -65,25 +65,22 @@ export function getGroupLabel(
   return `${typeWrapper}${componentNameWrapper}${timeWrapper}`
 }
 
-export function getComponentName(): string {
-  // Tested in the scope of useLog testing
-  try {
-    throw new Error('Getting the stack of error to parse it for component name')
-  } catch (error) {
-    /* istanbul ignore next */
-    if (error instanceof Error && error?.stack) {
-      const re = /(\w+)@|at (\w+) \(/g
-
-      re.exec(error.stack ?? '')
-      re.exec(error.stack ?? '')
-      const m = re.exec(error.stack ?? '') ?? []
-
-      return String(m[1] || m[2])
-    }
-
-    /* istanbul ignore next */
-    return '' // will be never reached since getComponentName always throws an instance of Error to parse the stack
+export function getComponentName(
+  error = new Error(
+    'Getting the stack of error to parse it for component name',
+  ),
+): string {
+  if (!error.stack) {
+    return ''
   }
+
+  const re = /(\w+)@|at (\w+) \(/g
+
+  re.exec(error.stack)
+  re.exec(error.stack)
+  const m = re.exec(error.stack)
+
+  return m ? String(m[1] || m[2]) : ''
 }
 
 export function getRenderFunctionProps<T>(
