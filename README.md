@@ -56,11 +56,11 @@ yarn add -D react-log-hook
 ### Basic usage
 
 ```javascript
-import {useLog} from 'react-log-hook'
+import { useLog } from 'react-log-hook'
 
 const App = () => {
   // Add a logger
-  const {log} = useLog()
+  const { log } = useLog()
 
   const [state, setState] = useState(null)
 
@@ -74,7 +74,7 @@ const App = () => {
 ### Configuration options
 
 ```javascript
-import {useLog} from 'react-log-hook'
+import { useLog } from 'react-log-hook'
 
 const App = () => {
   // Any configuration properties are optional
@@ -121,7 +121,7 @@ const App = () => {
         isGrouped /** Enable grouping for logs  */,
         isCollapsed /** Render groups collapsed  */,
       },
-    }): void {
+    }) {
       console.log(value)
     },
   })
@@ -131,7 +131,7 @@ const App = () => {
   // It's possible to redefine any configuration option per log call!
   log(state, {
     inline: false,
-    logLevel: 'warn'
+    logLevel: 'warn',
   })
 
   return null
