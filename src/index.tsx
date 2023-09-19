@@ -67,7 +67,7 @@ export function useLog({
    * log(someState, {environments: ['production']})
    * ```
    */
-  function log<T>(value: T, props?: LogConfig): void {
+  function log<T>(value: T, config?: LogConfig): void {
     const clonedValue = JSON.parse(JSON.stringify(value)) as T
     const prevValueRef = useRef<T>()
     const printProps: Pick<
@@ -83,19 +83,19 @@ export function useLog({
     > = {
       value: clonedValue,
       styles: {
-        componentCSS: props?.styles?.componentCSS ?? componentCSS,
-        subValueCSS: props?.styles?.subValueCSS ?? subValueCSS,
-        changeCSS: props?.styles?.changeCSS ?? changeCSS,
+        componentCSS: config?.styles?.componentCSS ?? componentCSS,
+        subValueCSS: config?.styles?.subValueCSS ?? subValueCSS,
+        changeCSS: config?.styles?.changeCSS ?? changeCSS,
       },
       componentName,
       flags: {
-        isGrouped: props?.isGroupingEnabled ?? isGroupingEnabled,
-        isCollapsed: props?.isGroupCollapsed ?? isGroupCollapsed,
+        isGrouped: config?.isGroupingEnabled ?? isGroupingEnabled,
+        isCollapsed: config?.isGroupCollapsed ?? isGroupCollapsed,
       },
-      printer: props?.printer ?? printer,
-      logLevel: props?.logLevel ?? logLevel,
-      groupLabelRenderer: props?.groupLabelRenderer ?? groupLabelRenderer,
-      inline: props?.inline ?? inline,
+      printer: config?.printer ?? printer,
+      logLevel: config?.logLevel ?? logLevel,
+      groupLabelRenderer: config?.groupLabelRenderer ?? groupLabelRenderer,
+      inline: config?.inline ?? inline,
     }
 
     if (environments.includes(process.env.NODE_ENV ?? 'production')) {
@@ -103,10 +103,10 @@ export function useLog({
         const isUnmounting = useRef(false)
 
         const printFunc = (printProps: _PrintConfig<T>): void =>
-          (props?.render ?? render ?? print)(
+          (config?.render ?? render ?? print)(
             getRenderFunctionProps(
               printProps,
-              Boolean(props?.render ?? render),
+              Boolean(config?.render ?? render),
             ),
           )
 
